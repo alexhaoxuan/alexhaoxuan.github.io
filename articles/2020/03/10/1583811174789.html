@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>java项目中Classpath路径到底指的是哪里？ - 奶瓶</title><meta name="description" content="https://blog.csdn.net/javaloveiphone/article/details/51994268"/><meta property="og:description" content="https://blog.csdn.net/javaloveiphone/article/details/51994268"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://github.com"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://github.com"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="java项目中Classpath路径到底指的是哪里？ - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://github.com/articles/2020/03/10/1583811174789.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="java项目中Classpath路径到底指的是哪里？ - 奶瓶" href="/opensearch.xml"><link href="https://github.com/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://github.com/manifest.json">        <link rel="canonical" href="https://github.com/articles/2020/03/10/1583811174789.html">        <link rel="stylesheet"
-              href="https://github.com/skins/Bubble/css/base.css?1583580097307"/>
-            <link rel="prev" title="JVM" href="https://github.com/articles/2020/03/08/1583643883267.html">
-            <link rel="next" title="JDK 8 之Stream 流 （一）基本应用" href="https://github.com/articles/2020/03/17/1584380580303.html">
+<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>java项目中Classpath路径到底指的是哪里？ - 奶瓶</title><meta name="description" content="https://blog.csdn.net/javaloveiphone/article/details/51994268"/><meta property="og:description" content="https://blog.csdn.net/javaloveiphone/article/details/51994268"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://alexhaoxuan.github.io"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://alexhaoxuan.github.io"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="java项目中Classpath路径到底指的是哪里？ - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://alexhaoxuan.github.io/articles/2020/03/10/1583811174789.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="java项目中Classpath路径到底指的是哪里？ - 奶瓶" href="/opensearch.xml"><link href="https://alexhaoxuan.github.io/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://alexhaoxuan.github.io/manifest.json">        <link rel="canonical" href="https://alexhaoxuan.github.io/articles/2020/03/10/1583811174789.html">        <link rel="stylesheet"
+              href="https://alexhaoxuan.github.io/skins/Bubble/css/base.css?1583580097307"/>
+            <link rel="prev" title="JVM" href="https://alexhaoxuan.github.io/articles/2020/03/08/1583643883267.html">
+            <link rel="next" title="JDK 8 之Stream 流 （一）基本应用" href="https://alexhaoxuan.github.io/articles/2020/03/17/1584380580303.html">
     </head>
 <body class="fn__flex-column">
 <div id="pjax" class="fn__flex-1">
@@ -13,7 +13,7 @@
     <header class="header header--article">
         <div class="wrapper header__title">
             <h1 class="header__h1 fn__flex-inline">
-                <a href="https://github.com" rel="start">奶瓶</a>
+                <a href="https://alexhaoxuan.github.io" rel="start">奶瓶</a>
             </h1>
             <h2 class="header__desc header__desc--title">不会是在踩坑就是在踩坑的路上</h2>
             <div class="header__desc">
@@ -41,11 +41,11 @@
             </svg>
 
             <div class="side__header">
-                <a href="https://github.com" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
+                <a href="https://alexhaoxuan.github.io" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
 
                 <div class="side__meta">
                     16 文章 <br>
-                    <span data-uvstaturl="https://github.com">0</span> 浏览
+                    <span data-uvstaturl="https://alexhaoxuan.github.io">0</span> 浏览
                     
                 </div>
             </div>
@@ -55,7 +55,7 @@
             </div>
             <ul class="side__nav">
                 <li>
-                    <a href="https://github.com" rel="start">
+                    <a href="https://alexhaoxuan.github.io" rel="start">
                             奶瓶
                     </a>
                 </li>
@@ -64,19 +64,19 @@
                                 class="page-icon" src="/images/github-icon.png" alt="我的开源">我的开源</a>
                     </li>
                 <li>
-                    <a href="https://github.com/categories.html">分类</a>
+                    <a href="https://alexhaoxuan.github.io/categories.html">分类</a>
                 </li>
                 <li>
-                    <a href="https://github.com/tags.html">标签墙</a>
+                    <a href="https://alexhaoxuan.github.io/tags.html">标签墙</a>
                 </li>
                 <li>
-                    <a href="https://github.com/archives.html">存档</a>
+                    <a href="https://alexhaoxuan.github.io/archives.html">存档</a>
                 </li>
                 <li>
-                    <a href="https://github.com/links.html">友情链接</a>
+                    <a href="https://alexhaoxuan.github.io/links.html">友情链接</a>
                 </li>
                 <li>
-                    <a rel="alternate" href="https://github.com/rss.xml">RSS</a>
+                    <a rel="alternate" href="https://alexhaoxuan.github.io/rss.xml">RSS</a>
                 </li>
             </ul>
         </div>
@@ -93,7 +93,7 @@
                 </time>
                 /
                     <a rel="tag"
-                       href="https://github.com/tags/%E9%9B%B6%E7%A2%8E%E7%82%B9">零碎点</a> &nbsp;
+                       href="https://alexhaoxuan.github.io/tags/%E9%9B%B6%E7%A2%8E%E7%82%B9">零碎点</a> &nbsp;
             </div>
             <h2 class="article__title">
                 java项目中Classpath路径到底指的是哪里？
@@ -101,7 +101,7 @@
 <div class="article__share"
      data-title="java项目中Classpath路径到底指的是哪里？"
      data-blogtitle="奶瓶"
-     data-url="https://github.com/articles/2020/03/10/1583811174789.html"
+     data-url="https://alexhaoxuan.github.io/articles/2020/03/10/1583811174789.html"
      data-avatar="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100">
     <span class="item" data-type="qqz">
         <svg viewBox="0 0 32 32" width="100%" height="100%">
@@ -147,7 +147,7 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
 
 标题：java项目中Classpath路径到底指的是哪里？<br>
 作者：<a href="www.alexli.com.cn" target="_blank">alex18595752445</a><br>
-地址：<a href="www.alexli.com.cn" target="_blank">https://github.com/articles/2020/03/10/1583811174789.html</a><br>
+地址：<a href="www.alexli.com.cn" target="_blank">https://alexhaoxuan.github.io/articles/2020/03/10/1583811174789.html</a><br>
 
 <!-- 签名档内可使用 HTML、JavaScript -->
 <br>
@@ -178,7 +178,7 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
     
 </div>
 <script type="text/javascript"
-        src="https://github.com/skins/Bubble/js/TweenMax.min.js?1583580097307"
+        src="https://alexhaoxuan.github.io/skins/Bubble/js/TweenMax.min.js?1583580097307"
         charset="utf-8"></script>
 <footer class="footer">
     <div class="wrapper">
@@ -218,7 +218,7 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
         </a>
  <br>
         &copy; 2020
-        <a href="https://github.com">奶瓶</a>
+        <a href="https://alexhaoxuan.github.io">奶瓶</a>
         豫ICP备20003042号
         <span class="footer__heart">❤️</span>
         Powered by <a href="https://solo.b3log.org" target="_blank">Solo</a>
@@ -233,8 +233,8 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
 </svg>
 <script>
   var Label = {
-    servePath: "https://github.com",
-    staticServePath: "https://github.com",
+    servePath: "https://alexhaoxuan.github.io",
+    staticServePath: "https://alexhaoxuan.github.io",
     luteAvailable: false,
     hljsStyle: 'github',
     langLabel: "zh_CN",
@@ -244,10 +244,10 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
   }
 </script>
 <script type="text/javascript"
-        src="https://github.com/skins/Bubble/js/common.min.js?1583580097307"
+        src="https://alexhaoxuan.github.io/skins/Bubble/js/common.min.js?1583580097307"
         charset="utf-8"></script>
 <script type="text/javascript"
-        src="https://github.com/skins/Bubble/js/circleMagic.min.js?1583580097307"
+        src="https://alexhaoxuan.github.io/skins/Bubble/js/circleMagic.min.js?1583580097307"
         charset="utf-8"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.css"/>
 <script async src="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.js"></script>
@@ -281,11 +281,11 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
 
 
 <script type="text/javascript">
-    Util.addScript('https://github.com/js/page.min.js?1583580097307', 'soloPageScript')
+    Util.addScript('https://alexhaoxuan.github.io/js/page.min.js?1583580097307', 'soloPageScript')
     var page = new Page({
         "commentContentCannotEmptyLabel": "评论内容只能为 2 到 500 个字符！",
         "oId": "1583811174789",
-        "blogHost": "https://github.com",
+        "blogHost": "https://alexhaoxuan.github.io",
         "randomArticles1Label": "随机阅读：",
         "externalRelevantArticles1Label": "站外相关阅读："
     });
@@ -299,4 +299,4 @@ classpath*：不仅包含class路径，还包括jar文件中(class路径)进行�
 </body>
 </html>
 
-<!-- Generated by Latke (https://github.com/88250/latke) in 46ms, 2020/03/18 18:15:19 -->
+<!-- Generated by Latke (https://github.com/88250/latke) in 31ms, 2020/03/18 18:47:24 -->
