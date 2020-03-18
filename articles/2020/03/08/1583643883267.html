@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>JVM - 奶瓶</title><meta name="description" content="https://blog.csdn.net/m0_38075425/article/details/81627349 https://blog.csdn.net/qq_36314960/article/details/79923581"/><meta property="og:description" content="https://blog.csdn.net/m0_38075425/article/details/81627349 https://blog.csdn.net/qq_36314960/article/details/79923581"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://github.com"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://github.com"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="JVM - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://github.com/articles/2020/03/08/1583643883267.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="JVM - 奶瓶" href="/opensearch.xml"><link href="https://github.com/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://github.com/manifest.json">        <link rel="canonical" href="https://github.com/articles/2020/03/08/1583643883267.html">        <link rel="stylesheet"
+              href="https://github.com/skins/Bubble/css/base.css?1583580097307"/>
+            <link rel="prev" title="数据库设计之权限设计" href="https://github.com/articles/2020/03/05/1583375447321.html">
+            <link rel="next" title="java项目中Classpath路径到底指的是哪里？" href="https://github.com/articles/2020/03/10/1583811174789.html">
+    </head>
+<body class="fn__flex-column">
+<div id="pjax" class="fn__flex-1">
+    
+    <progress class="fn__progress"></progress>
+    <header class="header header--article">
+        <div class="wrapper header__title">
+            <h1 class="header__h1 fn__flex-inline">
+                <a href="https://github.com" rel="start">奶瓶</a>
+            </h1>
+            <h2 class="header__desc header__desc--title">不会是在踩坑就是在踩坑的路上</h2>
+            <div class="header__desc">
+                愿意用三辈子如烟火般美丽的生命去换取你一世的迷恋。
+            </div>
+            <svg class="header__down" id="headerDown" viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M15.992 25.304c-0 0-0 0-0.001 0-0.516 0-0.981-0.216-1.31-0.563l-0.001-0.001-14.187-14.996c-0.306-0.323-0.494-0.76-0.494-1.241 0-0.998 0.809-1.807 1.807-1.807 0.517 0 0.983 0.217 1.313 0.565l0.001 0.001 12.875 13.612 12.886-13.612c0.331-0.348 0.797-0.565 1.314-0.565 0.481 0 0.918 0.187 1.242 0.493l-0.001-0.001c0.723 0.687 0.755 1.832 0.072 2.555l-14.201 14.996c-0.33 0.348-0.795 0.564-1.311 0.564-0.001 0-0.003 0-0.004 0h0z"></path>
+            </svg>
+        </div>
+    </header>
+    <div class="side__menu">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+        </svg>
+        <span>
+            &nbsp; menu
+        </span>
+    </div>
+    <div class="side__main">
+        <div class="side__bg"></div>
+        <div class="side__panel">
+            <svg class="side__close ft__a" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 20 20">
+                <path d="M18.362 19.324c-0.902 0.902-2.363 0.902-3.263 0l-5.098-5.827-5.098 5.825c-0.902 0.902-2.363 0.902-3.263 0-0.902-0.902-0.902-2.363 0-3.263l5.304-6.057-5.306-6.061c-0.902-0.902-0.902-2.361 0-3.263s2.361-0.902 3.263 0l5.1 5.829 5.098-5.829c0.902-0.902 2.361-0.902 3.263 0s0.902 2.363 0 3.263l-5.304 6.061 5.304 6.057c0.902 0.902 0.902 2.363 0 3.265z"></path>
+            </svg>
+
+            <div class="side__header">
+                <a href="https://github.com" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
+
+                <div class="side__meta">
+                    16 文章 <br>
+                    <span data-uvstaturl="https://github.com">0</span> 浏览
+                    
+                </div>
+            </div>
+
+            <div class="side__title">
+                <span>ღゝ◡╹)ノ❤️</span>
+            </div>
+            <ul class="side__nav">
+                <li>
+                    <a href="https://github.com" rel="start">
+                            奶瓶
+                    </a>
+                </li>
+                    <li>
+                        <a href="/my-github-repos" target="_self"><img
+                                class="page-icon" src="/images/github-icon.png" alt="我的开源">我的开源</a>
+                    </li>
+                <li>
+                    <a href="https://github.com/categories.html">分类</a>
+                </li>
+                <li>
+                    <a href="https://github.com/tags.html">标签墙</a>
+                </li>
+                <li>
+                    <a href="https://github.com/archives.html">存档</a>
+                </li>
+                <li>
+                    <a href="https://github.com/links.html">友情链接</a>
+                </li>
+                <li>
+                    <a rel="alternate" href="https://github.com/rss.xml">RSS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="article__top" style="background-image: url(https://img.hacpai.com/bing/20180613.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)">
+        <div style="background-image: url(https://img.hacpai.com/bing/20180613.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)"></div>
+        <canvas id="articleTop"></canvas>
+    </div>
+    <div class="article">
+        <div class="ft__center">
+            <div class="article__meta">
+                <time>
+                    2020-03-08
+                </time>
+                /
+                    <a rel="tag"
+                       href="https://github.com/tags/JVM">JVM</a> &nbsp;
+            </div>
+            <h2 class="article__title">
+                JVM
+            </h2>
+<div class="article__share"
+     data-title="JVM"
+     data-blogtitle="奶瓶"
+     data-url="https://github.com/articles/2020/03/08/1583643883267.html"
+     data-avatar="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100">
+    <span class="item" data-type="qqz">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M22.824 13.989l-8.348 6.287s3.351 0.522 8.404 0.461l-0.23-1.040 7.2-6.549c0.132-0.12 0.183-0.312 0.129-0.487s-0.203-0.299-0.377-0.314l-9.492-0.856-3.708-9.213c-0.068-0.169-0.226-0.279-0.401-0.279s-0.333 0.11-0.401 0.279l-3.708 9.213-9.492 0.856c-0.174 0.015-0.323 0.139-0.377 0.314s-0.004 0.366 0.129 0.487l7.2 6.549-2.158 9.742c-0.040 0.178 0.026 0.365 0.168 0.474 0.142 0.107 0.331 0.115 0.481 0.021l8.158-5.165 8.158 5.165c0.070 0.045 0.147 0.066 0.225 0.066 0.090 0 0.18-0.029 0.256-0.086 0.142-0.109 0.208-0.295 0.168-0.474l-1.707-7.704c0.732-0.386 1.538-1.040 1.538-1.040s-3.195 1.638-14.664 0.838l8.312-6.325s-0.327-0.534-10.744-0.914c-0.697-0.026 8.493-1.83 15.281-0.305z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="wechat">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="weibo">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M13.444 27.064c-5.3 0.525-9.875-1.875-10.219-5.35-0.344-3.481 3.675-6.719 8.969-7.244 5.3-0.525 9.875 1.875 10.212 5.35 0.35 3.481-3.669 6.725-8.963 7.244zM24.038 15.521c-0.45-0.137-0.762-0.225-0.525-0.819 0.512-1.287 0.563-2.394 0.006-3.188-1.038-1.481-3.881-1.406-7.137-0.037 0 0-1.025 0.444-0.762-0.363 0.5-1.613 0.425-2.956-0.356-3.737-1.769-1.769-6.469 0.069-10.5 4.1-3.013 3.006-4.763 6.212-4.763 8.981 0 5.287 6.787 8.506 13.425 8.506 8.7 0 14.494-5.056 14.494-9.069 0-2.431-2.044-3.806-3.881-4.375z"></path>
+            <path d="M29.819 5.833c-2.1-2.331-5.2-3.219-8.063-2.612v0c-0.663 0.144-1.081 0.794-0.938 1.45 0.144 0.662 0.788 1.081 1.45 0.938 2.038-0.431 4.238 0.2 5.731 1.856s1.9 3.913 1.256 5.888v0c-0.206 0.644 0.144 1.331 0.788 1.544 0.644 0.206 1.331-0.144 1.544-0.787v-0.006c0.9-2.762 0.331-5.938-1.769-8.269z"></path>
+            <path d="M26.588 8.752c-1.025-1.138-2.538-1.569-3.925-1.269-0.569 0.119-0.931 0.688-0.813 1.256 0.125 0.569 0.688 0.931 1.25 0.806v0c0.681-0.144 1.419 0.069 1.919 0.619 0.5 0.556 0.637 1.313 0.419 1.975v0c-0.175 0.55 0.125 1.15 0.681 1.331 0.556 0.175 1.15-0.125 1.331-0.681 0.438-1.356 0.163-2.906-0.863-4.037z"></path>
+            <path d="M13.738 20.771c-0.188 0.319-0.594 0.469-0.912 0.337-0.319-0.125-0.412-0.488-0.231-0.794 0.188-0.306 0.581-0.456 0.894-0.337 0.313 0.113 0.425 0.469 0.25 0.794zM12.044 22.933c-0.512 0.819-1.613 1.175-2.438 0.8-0.813-0.369-1.056-1.319-0.544-2.119 0.506-0.794 1.569-1.15 2.388-0.806 0.831 0.356 1.1 1.3 0.594 2.125zM13.969 17.146c-2.519-0.656-5.369 0.6-6.463 2.819-1.119 2.262-0.037 4.781 2.506 5.606 2.638 0.85 5.75-0.456 6.831-2.894 1.069-2.394-0.262-4.85-2.875-5.531z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="twitter">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32.003 6.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
+        </svg>
+    </span>
+    <span class="item__qr"></span>
+</div>        </div>
+        <div class="wrapper">
+            <section class="vditor-reset articles article__content">
+                <p><img src="https://img.hacpai.com/bing/20180613.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-bb0601da.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>方法区：<strong>是线程共享的内存区域</strong>，用来存储类加载的信息、常量、静态变量、即时编译器编译后的代码等。其中方法区中还有个经常会用到的区域叫做运行时常量池，主要用于存储一些常量，当创建一个常量时，首先会在运行时常量池查看是否有，有则直接使用，否则重新创建。</p>
+<p>堆：堆是最大的一块内存区域，也是垃圾回收管理的主要区域，主要用于存放对象实例。</p>
+<p>程序计时器：<strong>线程私有的</strong>，每个线程都会分配一个线程计时器，用来表示当前线程执行的字节码的行号指示器。在多线程中，一个线程执行的时候释放锁，另一个线程执行完，再回来执行前面线程的时候，就是通过程序计时器来获取继续执行的位置。</p>
+<p><strong>虚拟机栈：虚拟机栈主要存储基本数据类型变量和引用类型变量</strong>。其中与堆的区别就是如：Obj obj=new Object()；等号左边则是在虚拟机栈上分配栈区存储引用类型变量的句柄 Obj obj，等号右边则是存储对象实例，栈区的句柄是指向堆区的对象实例的，一般通过句柄访问堆区的对象实例。</p>
+<p>本地方法栈（线程私有）：与虚拟机栈意义相似，区别在于虚拟机栈用于使 Java 方法，而本地方法栈则是针对于 Native 方法服务。</p>
+<h1 id="toc_h1_0"><strong>一、<strong><strong>JVM</strong></strong>的生命周期</strong></h1>
+<ol>
+<li>
+<pre><code>  JVM实例对应了一个独立运行的Java程序它是进程级别
+</code></pre>
+</li>
+</ol>
+<p>a)     启动。启动一个 Java 程序时，一个 JVM 实例就产生了，任何一个拥有 public static void main(String[] args)函数的 class 都可以作为 JVM 实例运行的起点</p>
+<p>b)     运行。main()作为该程序初始线程的起点，任何其他线程均由该线程启动。JVM 内部有两种线程：守护线程和非守护线程，main()属于非守护线程，守护线程通常由 JVM 自己使用，Java 程序也可以标明自己创建的线程是守护线程</p>
+<p>c)     消亡。当程序中的所有非守护线程都终止时，JVM 才退出；若安全管理器允许，程序也可以使用 Runtime 类或者 System.exit()来退出</p>
+<ol>
+<li>
+<pre><code>  JVM执行引擎实例则对应了属于用户运行程序的线程它是线程级别的
+</code></pre>
+</li>
+</ol>
+<h1 id="toc_h1_1">二、JVM 的体系结构</h1>
+<hr>
+<ul>
+<li>类装载器（ClassLoader）（用来装载。class 文件）<br>
+<strong><strong>特别注意：双亲委派机制</strong></strong></li>
+<li>执行引擎（执行字节码，或者执行本地方法）</li>
+<li>运行时数据区（方法区、堆、Java 栈、PC 寄存器、本地方法栈）</li>
+</ul>
+<hr>
+<p><strong>类加载的时机：</strong></p>
+<ul>
+<li>创建类的实例，也就是 new 一个对象</li>
+<li>访问某个类或接口的静态变量，或者对该静态变量赋值</li>
+<li>调用类的静态方法</li>
+<li>反射（Class.forName("com.lyj.load")）</li>
+<li>初始化一个类的子类（会首先初始化子类的父类）</li>
+<li>JVM 启动时标明的启动类，即文件名和类名相同的那个类<br>
+<strong>注意：</strong><br>
+对于一个 final 类型的静态变量，如果该变量的值在编译时就可以确定下来，那么这个变量相当于“宏变量”。Java 编译器会在编译时直接把这个变量出现的地方替换成它的值，因此即使程序使用该静态变量，也不会导致该类的初始化。反之，如果 final 类型的静态 Field 的值不能在编译时确定下来，则必须等到运行时才可以确定该变量的值，如果通过该类来访问它的静态变量，则会导致该类被初始化。</li>
+</ul>
+<h1 id="toc_h1_2"><strong>三、JVM 类加载器（类加载的过程（5 个阶段））</strong></h1>
+<p><img src="https://img.hacpai.com/file/2020/03/image-54b43823.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<h2 id="toc_h2_3"><strong>JVM 整个类加载过程的步骤：</strong></h2>
+<p><strong>1. 装载</strong></p>
+<p>装载过程负责找到二进制字节码并加载至 JVM 中，JVM 通过类名、类所在的包名通过 ClassLoader 来完成类的加载，同样，也采用以上三个元素来标识一个被加载了的类：类名 +</p>
+<p>包名 +ClassLoader 实例 ID。</p>
+<p><strong>2.</strong> <strong>链接</strong></p>
+<p>链接过程负责对二进制字节码的格式进行校验、初始化装载类中的静态变量以及解析类中调用的接口、类。</p>
+<p>完成校验后，JVM 初始化类中的静态变量，并将其值赋为默认值。</p>
+<p>最后对类中的所有属性、方法进行验证，以确保其需要调用的属性、方法存在，以及具备应的权限（例如 public、private 域权限等），会造成 NoSuchMethodError、NoSuchFieldError 等错误信息。</p>
+<p><strong>3. 初始化</strong></p>
+<p>初始化过程即为执行类中的静态初始化代码、构造器代码以及静态属性的初始化，在四种情况下初始化过程会被触发执行：</p>
+<p>调用了 new；</p>
+<p>反射调用了类中的方法；</p>
+<p>子类调用了初始化；</p>
+<p>JVM 启动过程中指定的初始化类。</p>
+<h3 id="toc_h3_4">类加载器</h3>
+<p>根类装载器是 JVM 实现的一部分；</p>
+<p>用户自定义类装载器则是 Java 程序的一部分，必须是 ClassLoader 类的子类。</p>
+<p><strong>JVM 装载顺序：</strong></p>
+<pre><code>Jvm启动时，由Bootstrap向User-Defined方向加载类；
+
+应用进行ClassLoader时，由User-Defined向Bootstrap方向查找并加载类；
+</code></pre>
+<p><strong>JVM 预定义有三种类加载器，当一个 JVM 启动的时候，Java 开始使用如下三种类加载器：前三个为 JVM 预设类加载器</strong></p>
+<p><strong>1.Bootstrap ClassLoader</strong></p>
+<p>这是 JVM 的根 ClassLoader，它是用 C++ 实现的，JVM 启动时初始化此 ClassLoader，并由此 ClassLoader 完成 $JAVA_HOME 中 jre/lib/rt.jar（Sun JDK 的实现）中所有 class 文件的加载，这个 jar 中包含了 Java 规范定义的所有接口以及实现。</p>
+<p><strong>2.Extension ClassLoader</strong></p>
+<p>JVM 用此 classloader 来加载扩展功能的一些 jar 包。</p>
+<p><strong>3.</strong> <strong>System ClassLoader</strong></p>
+<p>JVM 用此 classloader 来加载启动参数中指定的 Classpath 中的 jar 包以及目录，在 Sun JDK 中 ClassLoader 对应的类名为 AppClassLoader。</p>
+<p><strong>4.User-Defined ClassLoader</strong></p>
+<p>User-DefinedClassLoader 是 Java 开发人员继承 ClassLoader 抽象类自行实现的 ClassLoader，基于自定义的 ClassLoader 可用于加载非 Classpath 中的 jar 以及目录。</p>
+<p><strong>ClassLoader 抽象类的几个关键方法：</strong></p>
+<p>（1）loadClass</p>
+<p>此方法负责加载指定名字的类，ClassLoader 的实现方法为先从已经加载的类中寻找，如没有则继续从 parent ClassLoader 中寻找，如仍然没找到，则从 System ClassLoader 中寻找，最后再调用 findClass 方法来寻找，如要改变类的加载顺序，则可覆盖此方法</p>
+<p>（2） findLoadedClass</p>
+<p>此方法负责从当前 ClassLoader 实例对象的缓存中寻找已加载的类，调用的为 native 的方法。</p>
+<p>（3）findClass</p>
+<p>此方法直接抛出 ClassNotFoundException，因此需要通过覆盖 loadClass 或此方法来以自定义的方式加载相应的类。</p>
+<p>（4） findSystemClass</p>
+<p>此方法负责从 System ClassLoader 中寻找类，如未找到，则继续从 Bootstrap ClassLoader 中寻找，如仍然为找到，则返回 null。</p>
+<p>（5） defineClass</p>
+<p>此方法负责将二进制的字节码转换为 Class 对象</p>
+<p>（6）resolveClass</p>
+<p>此方法负责完成 Class 对象的链接，如已链接过，则会直接返回。</p>
+<h1 id="toc_h1_5"><strong>四、JVM 执行引擎</strong></h1>
+<p><strong>在执行方法时 JVM</strong> 提供了四种指令来执行：</p>
+<p>（1）invokestatic：调用类的 static 方法</p>
+<p>（2）invokevirtual：调用对象实例的方法</p>
+<p>（3）invokeinterface：将属性定义为接口来进行调用</p>
+<p>（4）invokespecial：JVM 对于初始化对象（Java 构造器的方法为：<init>）以及调用对象实例中的私有方法时。</init></p>
+<p><strong>主要的执行技术有：</strong></p>
+<p>解释，即时编译，自适应优化、芯片级直接执行</p>
+<p>（1）解释属于第一代 JVM，</p>
+<p>（2）即时编译 JIT 属于第二代 JVM，</p>
+<p>（3）自适应优化（目前 Sun 的 HotspotJVM 采用这种技术）则吸取第一代 JVM 和第二代</p>
+<p>JVM 的经验，采用两者结合的方式</p>
+<p>开始对所有的代码都采取解释执行的方式，并监视代码执行情况，然后对那些经常调用的方法启动一个后台线程，将其编译为本地代码，并进行优化。若方法不再频繁使用，则取消编译过的代码，仍对其进行解释执行。</p>
+<h1 id="toc_h1_6"><strong>五、JVM 运行时数据区</strong></h1>
+<p><strong>第一块：PC 寄存器</strong></p>
+<p>PC 寄存器是用于存储每个线程下一步将执行的 JVM 指令，如该方法为 native 的，则 PC 寄存器中不存储任何信息。</p>
+<p><strong>第二块：JVM</strong> 栈</p>
+<p>JVM 栈是线程私有的，每个线程创建的同时都会创建 JVM 栈，JVM 栈中存放的为当前线程中局部基本类型的变量（Java 中定义的八种基本类型：boolean、char、byte、short、int、long、float、double）、部分的返回结果以及 Stack Frame，非基本类型的对象在 JVM 栈上仅存放一个指向堆上的地址</p>
+<p><strong>第三块：堆（Heap）</strong></p>
+<p>它是 JVM 用来存储对象实例以及数组值的区域，可以认为 Java 中所有通过 new 创建的对象的内存都在此分配，Heap 中的对象的内存需要等待 GC 进行回收。</p>
+<p>（1）堆是 JVM 中所有线程共享的，因此在其上进行对象内存的分配均需要进行加锁，这也导致了 new 对象的开销是比较大的</p>
+<p>（2）Sun Hotspot JVM 为了提升对象内存分配的效率，对于所创建的线程都会分配一块独立的空间 TLAB（Thread Local Allocation Buffer），其大小由 JVM 根据运行的情况计算而得，在 TLAB 上分配对象时不需要加锁，因此 JVM 在给线程的对象分配内存时会尽量的在 TLAB 上分配，在这种情况下 JVM 中分配对象内存的性能和 C 基本是一样高效的，但如果对象过大的话则仍然是直接使用堆空间分配</p>
+<p>（3）       TLAB 仅作用于新生代的 Eden Space，因此在编写 Java 程序时，通常多个小的对象比大的对象分配起来更加高效。</p>
+<p><strong>第四块：方法区域（Method Area）</strong></p>
+<p>（1）在 Sun JDK 中这块区域对应的为 PermanetGeneration，又称为持久代。</p>
+<p>（2）方法区域存放了所加载的类的信息（名称、修饰符等）、类中的静态变量、类中定义为 final 类型的常量、类中的 Field 信息、类中的方法信息，当开发人员在程序中通过 Class</p>
+<p>对象中的 getName、isInterface 等方法来获取信息时，这些数据都来源于方法区域，同时方法区域也是全局共享的，在一定的条件下它也会被 GC，当方法区域需要使用的内存超过其允许的大小时，会抛出 OutOfMemory 的错误信息。</p>
+<p><strong>第五块：运行时常量池（Runtime Constant Pool）</strong></p>
+<p>存放的为类中的固定的常量信息、方法和 Field 的引用信息等，其空间从方法区域中分配。</p>
+<p><strong>第六块：本地方法堆栈（Native Method Stacks）</strong></p>
+<p>JVM 采用本地方法堆栈来支持 native 方法的执行，此区域用于存储每个 native 方法调用的状态。</p>
+<hr>
+<h1 id="toc_h1_7"><strong>六、JVM 垃圾回收</strong></h1>
+<p>GC 的基本原理：**将内存中不再被使用的对象进行回收，GC 中用于回收的方法称为收集器，由于 GC 需要消耗一些资源和时间，Java 在对对象的生命周期特征进行分析后，按照新生代、旧生代的方式来对对象进行收集，以尽可能的缩短 GC 对应用造成的暂停</p>
+<p>（1）对新生代的对象的收集称为 minor GC；</p>
+<p>（2）对旧生代的对象的收集称为 Full GC；</p>
+<p>（3）程序中主动调用 System.gc()强制执行的 GC 为 Full GC。</p>
+<p><strong>不同的对象引用类型， GC 会采用不同的方法进行回收，JVM 对象的引用分为了四种类型：（JDK1。2 之后引入）</strong></p>
+<p>（1）强引用：默认情况下，对象采用的均为强引用（这个对象的实例没有其他对象引用，GC 时才会被回收）。 eg：new a（）；、<img src="https://img.hacpai.com/file/2020/03/image-1489f64b.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>（2）软引用：软引用是 Java 中提供的一种比较适合于缓存场景的应用（只有在内存不够用的情况下才会被 GC）。<strong>提供了 SoftReference 类来实现软引用</strong></p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-eadc9ac3.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>（3）弱引用：在 GC 时一定会被 GC 回收。<strong>提供了 WeakReference 类来实现弱引用。</strong></p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-c178bb7f.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>（4）虚引用（幽灵引用、幻影引用）：由于虚引用只是用来得知对象是否被 GC。PhantomReference 类来实现虚引用。</p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-dc4eaab9.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-516a7e98.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"><img src="https://img.hacpai.com/file/2020/03/image-956976b1.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<h2 id="toc_h2_8">七、类加载机制</h2>
+<p>1.JVM 的类加载机制主要有如下 3 种。</p>
+<ul>
+<li>全盘负责：所谓全盘负责，就是当一个类加载器负责加载某个 Class 时，该 Class 所依赖和引用其他 Class 也将由该类加载器负责载入，除非显示使用另外一个类加载器来载入。（1+n）</li>
+<li>双亲委派：所谓的双亲委派，则是先让父类加载器试图加载该 Class，只有在父类加载器无法加载该类时才尝试从自己的类路径中加载该类。通俗的讲，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父加载器，依次递归，如果父加载器可以完成类加载任务，就成功返回；只有父加载器无法完成此加载任务时，才自己去加载。（父级先加载、子集在上）</li>
+<li>缓存机制。缓存机制将会保证所有加载过的 Class 都会被缓存，当程序中需要使用某个 Class 时，类加载器先从缓存区中搜寻该 Class，只有当缓存区中不存在该 Class 对象时，系统才会读取该类对应的二进制数据，并将其转换成 Class 对象，存入缓冲区中。这就是为很么修改了 Class 后，必须重新启动 JVM，程序所做的修改才会生效的原因。<br>
+2.这里说明一下双亲委派机制：</li>
+</ul>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;双亲委派机制，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式，即每个儿子都很懒，每次有活就丢给父亲去干，直到父亲说这件事我也干不了时，儿子自己才想办法去完成。</p>
+<p>&nbsp; &nbsp; &nbsp; 双亲委派机制的优势：采用双亲委派模式的是好处是 Java 类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子 ClassLoader 再加载一次。其次是考虑到安全因素，Java 核心 API 中定义类型不会被随意替换，假设通过网络传递一个名为 java.lang.Integer 的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心 Java API 发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的 java.lang.Integer，而直接返回已加载过的 Integer.class，这样便可以防止核心 API 库被随意篡改。</p>
+<h2 id="toc_h2_9">八、GC</h2>
+<p><img src="https://img.hacpai.com/file/2020/03/image-5798af6f.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>我们都知道在 Java 虚拟机中进行垃圾回收的场所有两个，一个是堆，一个是方法区。在堆中存储了 Java 程序运行时的所有对象信息，而垃圾回收其实就是对那些“死亡的”对象进行其所侵占的内存的释放，让后续对象再能分配到内存，从而完成程序运行的需要。关于何种对象为死亡对象，在下一部分将做详细介绍。Java 虚拟机将堆内存进行了“分块处理”，从广义上讲，在堆中进行垃圾回收分为新生代（Young Generation）和老生代（Old Generation）；从细微之处来看，为了提高 Java 虚拟机进行垃圾回收的效率，又将新生代分成了三个独立的区域（这里的独立区域只是一个相对的概念，并不是说分成三个区域以后就不再互相联合工作了），分别为：Eden 区（Eden Region）、From Survivor 区（Form Survivor Region）以及 To Survivor（To Survivor Region），而 Eden 区分配的内存较大，其他两个区较小，每次使用 Eden 和其中一块 Survivor。Java 虚拟机在进行垃圾回收时，将 Eden 和 Survivor 中还存活着的对象进行一次性地复制到另一块 Survivor 空间上，直到其两个区域中对象被回收完成，当 Survivor 空间不够用时，需要依赖其他老年代的内存进行分配担保。当另外一块 Survivor 中没有足够的空间存放上一次新生代收集下来的存活对象时，这些对象将直接通过分配担保机制进入老生代，在老生代中不仅存放着这一种类型的对象，还存放着大对象（需要很多连续的内存的对象），当 Java 程序运行时，如果遇到大对象将会被直接存放到老生代中，长期存活的对象也会直接进入老年代。如果老生代的空间也被占满，当来自新生代的对象再次请求进入老生代时就会报 OutOfMemory 异常。新生代中的垃圾回收频率高，且回收的速度也较快。就 GC 回收机制而言，JVM 内存模型中的方法区更被人们倾向的称为永久代（Perm Generation），保存在永久代中的对象一般不会被回收。其永久代进行垃圾回收的频率就较低，速度也较慢。永久代的垃圾收集主要回收废弃常量和无用类。以 String 常量 abc 为例，当我们声明了此常量，那么它就会被放到运行时常量池中，如果在常量池中没有任何对象对 abc 进行引用，那么 abc 这个常量就算是废弃常量而被回收；判断一个类是否“无用”，则需同时满足三个条件：</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; （1）、该类所有的实例都已经被回收，也就是 Java 堆中不存在该类的任何实例；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; （2）、加载该类的 ClassLoader 已经被回收</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; （3）、该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</p>
+<p>虚拟机可以对满足上述 3 个条件的无用类进行回收，这里说的是可以回收而不是必然回收。</p>
+<p>&nbsp; &nbsp; 大多数情况下，对象在新生代 Eden 区中分配，当 Eden 区没有足够空间进行分配时，虚拟机将发起一次 Minor GC；同理，当老年代中没有足够的内存空间来存放对象时，虚拟机会发起一次 Major GC/Full GC。只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行 Minor GC，否则将进行 Full CG。</p>
+<p>&nbsp; &nbsp; 虚拟机通过一个对象年龄计数器来判定哪些对象放在新生代，哪些对象应该放在老生代。如果对象在 Eden 出生并经过一次 Minor GC 后仍然存活，并且能被 Survivor 容纳的话，将被移动到 Survivor 空间中，并将该对象的年龄设为 1。对象每在 Survivor 中熬过一次 Minor GC，年龄就增加 1 岁，当他的年龄增加到最大值 15 时，就将会被晋升到老年代中。虚拟机并不是永远地要求对象的年龄必须达到 MaxTenuringThreshold 才能晋升到老年代，如果在 Survivor 空间中所有相同年龄的对象大小的总和大于 Survivor 空间的一半，年龄大于或等于该年龄的对象就可以直接进入老年代，无需等到 MaxTenuringThreshold 中要求的年龄。</p>
+<h3 id="toc_h3_10">垃圾回收算法</h3>
+<ol>
+<li>、引用计数算法（Reference Counting）</li>
+</ol>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;给对象添加一个引用计数器，每当有一个地方引用它时，计数器值就加 1；当引用失效时，计数器值就减 1；任何时刻计数器为 0 的对象就是不可能再被使用的，这就是引用计数算法的核心。客观来讲，引用计数算法实现简单，判定效率也很高，在大部分情况下都是一个不错的算法。<em><strong>但是 Java 虚拟机并没有采用这个算法来判断何种对象为死亡对象，因为它很难解决对象之间相互循环引用的问题。</strong></em></p>
+<pre><code class="language-java">public class ReferenceCountingGC{
+  public Object object = null;
+  
+  private static final int OenM = 1024 * 1024;
+  private byte[] bigSize = new byte[2 * OneM];
+ 
+  public static void testCG(){
+     ReferenceCountingGC objA = new ReferenceCountingGC(); 
+      ReferenceCountingGC objB = new ReferenceCountingGC(); 
+  
+      objA.object = null;
+      objB.object = null;
+ 
+     System.gc();
+}
+}
+</code></pre>
+<p><strong>在上述代码段中，objA 与 objB 互相循环引用，没有结束循环的判断条件，运行结果显示 Full GC，就说明当 Java 虚拟机并不是使用引用计数算法来判断对象是否存活的。</strong></p>
+<p>（2）、可达性分析算法（Reachability Analysis）</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 这是 Java 虚拟机采用的判定对象是否存活的算法。通过一系列的称为“GC Roots"的对象作为起始点，从这些结点开始向下搜索，搜索所走过的路径称为饮用链（Reference Chain），当一个对象到 GC Roots 没有任何引用链相连时，则证明此对象是不可用的。可作为 GC Roots 的对象包括：虚拟机栈中引用的对象、方法区中类静态属性引用的对象、方法区中常量引用的对象。本地方法栈 JNI 引用的对象。<br>
+<img src="https://img.hacpai.com/file/2020/03/image-e6fdce14.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+<p>在上图可以看到 GC Roots 左边的对象都有引用链相关联，所以他们不是死亡对象，而在 GCRoots 右边有几个零散的对象没有引用链相关联，所以他们就会别 Java 虚拟机判定为死亡对象而被回收。</p>
+<p>3.标记-清除算法</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 该算法先标记，后清除，将所有需要回收的算法进行标记，然后清除；这种算法的缺点是：效率比较低；标记清除后会出现大量不连续的内存碎片，这些碎片太多可能会使存储大对象会触发 GC 回收，造成内存浪费以及时间的消耗。</p>
+<p>4.复制算法</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 复制算法将可用的内存分成两份，每次使用其中一块，当这块回收之后把未回收的复制到另一块内存中，然后把使用的清除。这种算法运行简单，解决了标记-清除算法的碎片问题，但是这种算法代价过高，需要将可用内存缩小一半，对象存活率较高时，需要持续的复制工作，效率比较低。</p>
+<p>5.标记整理算法</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 标记整理算法是针对复制算法在对象存活率较高时持续复制导致效率较低的缺点进行改进的，该算法是在标记-清除算法基础上，不直接清理，而是使存活对象往一端游走，然后清除一端边界以外的内存，这样既可以避免不连续空间出现，还可以避免对象存活率较高时的持续复制。这种算法适合老生代。</p>
+<p>6.分代收集算法</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;分代收集算法就是目前虚拟机使用的回收算法，它解决了标记整理不适用于老年代的问题，将内存分为各个年代，在不同年代使用不同的算法，从而使用最合适的算法，新生代存活率低，可以使用复制算法。而老年代对象存活率高，没有额外空间对它进行分配担保，所以使用标记整理算法。</p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-fc27f19c.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></p>
+                    <div>
+                        <hr>
+
+标题：JVM<br>
+作者：<a href="www.alexli.com.cn" target="_blank">alex18595752445</a><br>
+地址：<a href="www.alexli.com.cn" target="_blank">https://github.com/articles/2020/03/08/1583643883267.html</a><br>
+
+<!-- 签名档内可使用 HTML、JavaScript -->
+<br>
+                    </div>
+            </section>
+        </div>
+
+    </div>
+        <div class="post__toc">
+<ul class="article__toc">
+        <li class="toc__h1">
+            <a href="#toc_h1_0">一、JVM的生命周期</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_1">二、JVM 的体系结构</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_2">三、JVM 类加载器（类加载的过程（5 个阶段））</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_3">JVM 整个类加载过程的步骤：</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_4">类加载器</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_5">四、JVM 执行引擎</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_6">五、JVM 运行时数据区</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_7">六、JVM 垃圾回收</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_8">七、类加载机制</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_9">八、GC</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_10">垃圾回收算法</a>
+        </li>
+</ul>        </div>
+        <div id="b3logsolocomments"></div>
+        <div class="wrapper">
+            <div id="vcomment"
+                 style="    margin-bottom: 40px; margin-top: 80px;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 5px;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 20px;"
+                 data-name="alex18595752445" data-postId="1583643883267"></div>
+        </div>
+    <div class="article__bottom">
+        <div class="wrapper">
+            <div class="fn__flex">
+                <div class="item" id="randomArticles"></div>
+                <div class="item" id="relevantArticles"></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/TweenMax.min.js?1583580097307"
+        charset="utf-8"></script>
+<footer class="footer">
+    <div class="wrapper">
+            <a href="https://hacpai.com/member/alex18595752445"
+       title="https://hacpai.com/member/alex18595752445"
+       class="user__site"
+       target="_blank" rel="noopener nofollow">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path fill="#d23f31" style="fill: var(--color1, #d23f31)" d="M5.787 17.226h17.033l5.954 9.528c0.47 0.752 0.003 1.361-1.042 1.361h-15.141z"></path>
+            <path d="M10.74 3.927h17.033c1.045 0 1.512 0.609 1.042 1.361l-5.954 9.528h-19.872l6.379-10.209c0.235-0.376 0.849-0.681 1.372-0.681z"></path>
+            <path d="M2.953 17.226h2.839l6.804 10.889h-1.892c-0.523 0-1.137-0.305-1.372-0.681z"></path>
+        </svg>
+    </a>
+
+        <a href="https://github.com/alexhaoxuan"
+           title="https://github.com/alexhaoxuan"
+           class="user__site"
+           target="_blank" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M16 0.331c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"></path>
+            </svg>
+        </a>
+
+        <a href="tencent://message/?uin=948928501"
+           title="948928501"
+           target="_blank"
+           class="user__site" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M4.821 14.393c-0.125-0.304-0.143-0.607-0.143-0.929 0-0.5 0.321-1.304 0.625-1.679-0.018-0.464 0.179-1.411 0.536-1.714 0-3.304 2.554-7.464 5.536-8.893 1.839-0.875 3.768-1.179 5.786-1.179 1.571 0 3.286 0.375 4.75 0.982 4.196 1.768 5.143 5.054 6.036 9.25l0.018 0.089c0.518 0.786 0.982 1.714 0.982 2.679 0 0.482-0.321 0.964-0.321 1.393 0 0.036 0.107 0.179 0.125 0.214 1.536 2.268 2.929 4.732 2.929 7.554 0 0.625-0.339 2.804-1.339 2.804-0.696 0-1.464-1.696-1.714-2.161-0.018-0.018-0.036-0.018-0.054-0.018l-0.089 0.071c-0.571 1.482-1.196 2.875-2.357 3.982 1.018 0.982 2.661 0.893 2.964 2.589-0.089 0.196-0.054 0.411-0.196 0.607-1.018 1.536-3.75 1.732-5.393 1.732-2.179 0-3.946-0.571-6-1.179-0.429-0.125-1.071-0.054-1.536-0.107-1.089 1.196-3.75 1.518-5.286 1.518-1.357 0-6.607-0.089-6.607-2.411 0-1 0.214-1.286 0.911-1.929 0.554-0.107 0.964-0.411 1.607-0.446 0.089 0 0.161-0.018 0.25-0.036 0.018-0.018 0.036-0.018 0.036-0.071l-0.036-0.054c-1.232-0.286-2.964-3.393-3.232-4.679l-0.089-0.054c-0.125 0-0.179 0.268-0.214 0.357-0.393 0.911-1.321 1.893-2.357 2h-0.018c-0.143 0-0.089-0.143-0.196-0.179-0.25-0.589-0.411-1.125-0.411-1.786 0-3.571 1.714-6.214 4.5-8.321z"></path>
+            </svg>
+        </a>
+        <a href="javascript:void(0)"
+           class="user__site" title="wan948928501">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+            </svg>
+        </a>
+ <br>
+        &copy; 2020
+        <a href="https://github.com">奶瓶</a>
+        豫ICP备20003042号
+        <span class="footer__heart">❤️</span>
+        Powered by <a href="https://solo.b3log.org" target="_blank">Solo</a>
+        <br>
+        Theme Bubble
+        <sup>[<a href="https://www.cnblogs.com/jajian" target="_blank">ref</a>]</sup>
+        by <a href="http://vanessa.b3log.org" target="_blank">Vanessa</a> <br>
+    </div>
+</footer>
+<svg class="side__top" id="sideTop" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <path d="M26.562 13.958c0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303v0c0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303v0zM23.305 10.7c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM20.022 7.417c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM29.67 0h-27.339c-0.677 0-1.228 0.551-1.228 1.228s0.551 1.228 1.228 1.228h11.151l-10.725 10.725c-0.476 0.476-0.476 1.253 0 1.729 0.226 0.226 0.551 0.351 0.852 0.351s0.626-0.125 0.852-0.351l10.074-10.074v25.936c0 0.677 0.551 1.228 1.228 1.228s1.228-0.551 1.228-1.228v-26.011c0.476 0.426 1.203 0.426 1.679-0.050s0.476-1.253 0-1.729l-0.576-0.576h11.577c0.677 0 1.228-0.551 1.228-1.228 0-0.626-0.551-1.178-1.228-1.178z"></path>
+</svg>
+<script>
+  var Label = {
+    servePath: "https://github.com",
+    staticServePath: "https://github.com",
+    luteAvailable: false,
+    hljsStyle: 'github',
+    langLabel: "zh_CN",
+    version: "3.9.0",
+    staticSite: true,
+    showCodeBlockLn: true,
+  }
+</script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/common.min.js?1583580097307"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/circleMagic.min.js?1583580097307"
+        charset="utf-8"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.css"/>
+<script async src="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.js"></script>
+<div class="solo-kanbanniang">
+    <div class="solo-kanbanniang__tip"></div>
+    <canvas id="soloKanbanniang" width="280" height="250"></canvas>
+    <div class="solo-kanbanniang__tool">
+        <svg id="soloKanbanniangHome" viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32 18.967l-16-12.42-16 12.42v-5.064l16-12.42 16 12.42zM28 18.516v12h-8v-8h-8v8h-8v-12l12-9z"></path>
+        </svg>
+        <svg id="soloKanbanniangRSS" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M320.364 768q0 45.728-32 77.728t-77.728 32-77.728-32-32-77.728 32-77.728 77.728-32 77.728 32 32 77.728zM612.94 838.272q1.152 16-9.728 27.424-10.272 12-26.848 12h-77.152q-14.272 0-24.576-9.44t-11.424-23.712q-12.576-130.848-105.44-223.712t-223.712-105.44q-14.272-1.152-23.712-11.424t-9.44-24.576V402.24q0-16.576 12-26.848 9.728-9.728 24.576-9.728h2.848q91.424 7.424 174.848 46.016t148 103.712q65.152 64.576 103.712 148t46.016 174.848z m292.576 1.152q1.152 15.424-10.272 26.848-10.272 11.424-26.272 11.424h-81.728q-14.848 0-25.44-10.016t-11.136-24.288q-6.848-122.848-57.728-233.44t-132.288-192-192-132.288-233.44-58.272q-14.272-0.576-24.288-11.136t-10.016-24.864V109.664q0-16 11.424-26.272 10.272-10.272 25.152-10.272h1.728q149.728 7.424 286.56 68.576t243.136 168q106.848 106.272 168 243.136t68.576 286.56z"></path>
+        </svg>
+        <svg id="soloKanbanniangChat" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M802.42709 96.163153H219.476155c-84.48109 0-154.896836 71.746044-154.896836 157.840888v393.119449c0 86.072331 70.415746 157.819398 154.896836 157.819399h214.038818V925.470963s22.526039 40.168862 64.767096 5.734608c30.965246-25.819039 126.721123-91.828428 171.775248-123.385145h132.369773c84.502579 0 154.896836-83.21526 154.896836-157.839865V251.125481c0-86.094844-70.394257-154.962328-154.896836-154.962328zM301.144176 518.002714c-39.427988 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044 39.426965 0 70.393233 31.577183 70.393234 71.746044 0 40.169885-30.966269 71.746044-70.393234 71.746044z m208.411657 0c-39.450501 0-70.415746-31.576159-70.415746-71.746044 0-40.168862 30.965246-71.746044 70.415746-71.746044 39.405475 0 70.394257 31.577183 70.394257 71.746044 0 40.169885-30.988782 71.746044-70.394257 71.746044z m211.203236 0c-39.426965 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044s70.415746 31.577183 70.415746 71.746044c-0.001023 40.169885-30.988782 71.746044-70.415746 71.746044z"></path>
+        </svg>
+        <svg id="soloKanbanniangChange" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M936.672 193.216l-226.88-64c-8.704-2.528-18.112-1.12-25.824 3.776-7.68 4.864-12.896 12.736-14.432 21.728C655.712 236.928 595.328 288 512 288c-71.424 0-142.464-103.296-163.776-143.104-7.136-13.28-22.528-19.84-37.024-15.68l-224 64C73.472 197.152 64 209.728 64 224v256a31.93 31.93 0 0 0 11.712 24.736c7.392 6.08 17.152 8.512 26.56 6.624L224 487.04V832c0 52.928 43.072 96 96 96h384c52.928 0 96-43.072 96-96V519.04l121.728 24.352c9.44 1.92 19.2-0.544 26.56-6.624C955.68 530.656 960 521.6 960 512V224c0-14.336-9.536-26.912-23.328-30.784zM672 800H352c-17.664 0-32-14.304-32-32s14.336-32 32-32h320c17.696 0 32 14.304 32 32s-14.304 32-32 32z"></path>
+        </svg>
+        <svg id="soloKanbanniangPhoto" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M898.048 258.048q23.552-1.024 46.592 9.216t40.96 27.136 28.672 39.424 10.752 46.08l0 390.144q0 24.576-10.752 47.104t-28.672 40.448-40.96 28.16-47.616 10.24l-697.344 0q-24.576 0-48.64-10.24t-42.496-27.648-29.696-40.448-11.264-48.64l0-381.952q0-22.528 10.752-45.568t28.672-41.472 39.936-30.208 44.544-11.776l63.488 0 13.312-83.968q3.072-20.48 18.432-32.768t34.816-12.288l456.704 0q19.456 0 34.304 10.752t16.896 34.304l14.336 83.968 54.272 0zM548.864 712.704q40.96 0 77.824-15.872t63.488-42.496 42.496-62.976 15.872-77.312-15.872-77.312-42.496-62.976-63.488-42.496-77.824-15.872-77.312 15.872-63.488 42.496-43.008 62.976-15.872 77.312 15.872 77.312 43.008 62.976 63.488 42.496 77.312 15.872z"></path>
+        </svg>
+        <svg id="soloKanbanniangGithub" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M1024 524.8c0 114.346667-32.554667 217.216-97.706667 308.565333-65.066667 91.306667-149.162667 154.538667-252.288 189.610667-11.989333 2.304-20.778667 0.682667-26.325333-4.778667a27.605333 27.605333 0 0 1-8.362667-20.48v-144.213333c0-44.16-11.52-76.501333-34.645333-97.024 25.344-2.730667 48.085333-6.826667 68.309333-12.288a268.629333 268.629333 0 0 0 62.72-26.666667 187.434667 187.434667 0 0 0 53.973334-45.44c14.421333-18.005333 26.197333-41.898667 35.328-71.765333 9.088-29.824 13.653333-64.128 13.653333-102.826667 0-55.125333-17.536-102.058667-52.650667-140.8 16.426667-41.429333 14.677333-87.893333-5.333333-139.392-12.458667-4.096-30.464-1.578667-54.016 7.509334a355.328 355.328 0 0 0-61.312 30.08L640 271.274667a462.336 462.336 0 0 0-128-17.749334c-43.989333 0-86.656 5.930667-128 17.749334a589.824 589.824 0 0 0-28.330667-18.432c-11.776-7.253333-30.336-16.042667-55.68-26.325334-25.344-10.24-44.416-13.312-57.301333-9.216-19.584 51.498667-21.12 97.962667-4.693333 139.434667-35.114667 38.698667-52.650667 85.632-52.650667 140.757333 0 38.698667 4.565333 72.874667 13.653333 102.485334 9.130667 29.610667 20.778667 53.546667 34.986667 71.765333 14.250667 18.218667 32.128 33.493333 53.674667 45.781333 21.546667 12.288 42.453333 21.205333 62.677333 26.666667 20.224 5.461333 43.008 9.557333 68.309333 12.288-17.749333 16.384-28.629333 39.850667-32.64 70.4a130.005333 130.005333 0 0 1-29.994666 10.24c-10.666667 2.261333-23.338667 3.413333-37.973334 3.413333-14.72 0-29.269333-4.906667-43.690666-14.677333-14.464-9.813333-26.794667-24.064-36.992-42.709333a109.226667 109.226667 0 0 0-32.341334-35.541334c-13.141333-9.130667-24.106667-14.592-33.024-16.426666l-13.312-2.048c-9.344 0-15.786667 1.024-19.328 3.072-3.584 2.090667-4.693333 4.693333-3.328 7.893333 1.28 3.157333 3.328 6.4 5.973334 9.557333 2.688 3.2 5.546667 5.930667 8.661333 8.192l4.693333 3.413334c9.770667 4.565333 19.413333 13.226667 29.013334 25.984 9.514667 12.757333 16.512 24.362667 20.992 34.858666l6.656 15.701334c5.76 17.322667 15.530667 31.317333 29.312 42.026666 13.781333 10.666667 28.672 17.536 44.672 20.48 16 2.986667 31.445333 4.565333 46.336 4.821334 14.890667 0.213333 27.221333-0.597333 36.992-2.389334l15.36-2.730666c0 17.28 0.085333 37.546667 0.298666 60.8l0.341334 36.906666a27.050667 27.050667 0 0 1-8.661334 20.48c-5.76 5.461333-14.677333 7.082667-26.666666 4.778667-103.125333-35.072-187.221333-98.261333-252.330667-189.610667C32.554667 742.058667 0 639.146667 0 524.8c0-95.232 22.869333-183.04 68.693333-263.466667A516.266667 516.266667 0 0 1 254.976 70.4C333.44 23.466667 419.114667 0 512 0c92.885333 0 178.56 23.466667 256.981333 70.4a516.266667 516.266667 0 0 1 186.368 190.976C1001.130667 341.802667 1024 429.653333 1024 524.842667z"></path>
+        </svg>
+        <svg id="soloKanbanniangClose" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M517.572566143763 1018.6748601482986C238.26554897656422 1018.6748601482986 11.897910175114305 792.2714997690043 11.897910175114305 513.0002041796496c0-279.3070171671984 226.36763880144977-505.71037754649296 505.6746559686481-505.71037754649296 279.2712955893538 0 505.6746559686481 226.40336037929444 505.6746559686481 505.71037754649296C1023.2472221124112 792.2714997690043 796.8795833109612 1018.6748601482986 517.572566143763 1018.6748601482986zM754.7281214542927 339.25044954334646c13.752807470184345-13.752807470184345 9.680547595895998-40.186775075214015-9.073280772537204-58.94060344364717l-2.143294670678079-2.1075730928334457c-18.7538283684332-18.7538283684332-45.15207439561819-22.861809820566194-58.90488186580257-9.073280772537204l-168.21291007038468 168.24863164822932-180.42968969324974-180.46541127109438c-13.967136937252159-13.967136937252159-40.72259874288353-9.823433907274534-59.72647815622916 9.216167083915742l-2.143294670678079 2.143294670678079c-19.039600991190277 19.003879413345654-23.111860865478626 45.75934121897699-9.180445506071107 59.655035000539876l180.42968969324974 180.46541127109438-176.07165719620428 176.03593561835962c-13.788529048028984 13.824250625873615-9.716269173740633 40.151053497369375 9.073280772537204 58.94060344364717l2.1075730928334457 2.1075730928334457c18.7538283684332 18.7538283684332 45.15207439561819 22.897531398410823 58.90488186580257 9.073280772537204l176.10737877404887-176.10737877404887 170.39192631890742 170.42764789675192c13.967136937252159 13.931415359407513 40.686877165038865 9.85915548511917 59.690756578384516-9.180445506071107l2.1790162485227142-2.1790162485227142c19.039600991190277-18.968157835501014 23.147582443323273-45.72361964113239 9.180445506071107-59.690756578384516l-170.39192631890742-170.42764789675192L754.7281214542927 339.25044954334646z"></path>
+        </svg>
+    </div>
+</div>
+
+    <svg viewBox="0 0 32 32" width="100%" height="100%" class="side__top side__top--toc">
+        <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+    </svg>
+
+<script type="text/javascript">
+    Util.addScript('https://github.com/js/page.min.js?1583580097307', 'soloPageScript')
+    var page = new Page({
+        "commentContentCannotEmptyLabel": "评论内容只能为 2 到 500 个字符！",
+        "oId": "1583643883267",
+        "blogHost": "https://github.com",
+        "randomArticles1Label": "随机阅读：",
+        "externalRelevantArticles1Label": "站外相关阅读："
+    });
+    $(document).ready(function () {
+        page.load();
+    page.tips.externalRelevantArticlesDisplayCount = "0";
+    Skin.initArticle()
+    });
+</script>
+
+</body>
+</html>
+
+<!-- Generated by Latke (https://github.com/88250/latke) in 43ms, 2020/03/18 18:15:18 -->

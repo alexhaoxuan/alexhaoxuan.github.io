@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>redis 集群搭建 - 奶瓶</title><meta name="description" content="不是在踩坑就是在踩坑的路上"/><meta property="og:description" content="不是在踩坑就是在踩坑的路上"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://github.com"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://github.com"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="redis 集群搭建 - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://github.com/articles/2020/02/25/1582643975456.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="redis 集群搭建 - 奶瓶" href="/opensearch.xml"><link href="https://github.com/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://github.com/manifest.json">        <link rel="canonical" href="https://github.com/articles/2020/02/25/1582643975456.html">        <link rel="stylesheet"
+              href="https://github.com/skins/Bubble/css/base.css?1583580097307"/>
+            <link rel="prev" title="Nginx出现403 forbidden" href="https://github.com/articles/2020/02/21/1582281712975.html">
+            <link rel="next" title="数据库表设计原则" href="https://github.com/articles/2020/02/26/1582697822439.html">
+    </head>
+<body class="fn__flex-column">
+<div id="pjax" class="fn__flex-1">
+    
+    <progress class="fn__progress"></progress>
+    <header class="header header--article">
+        <div class="wrapper header__title">
+            <h1 class="header__h1 fn__flex-inline">
+                <a href="https://github.com" rel="start">奶瓶</a>
+            </h1>
+            <h2 class="header__desc header__desc--title">不会是在踩坑就是在踩坑的路上</h2>
+            <div class="header__desc">
+                愿意用三辈子如烟火般美丽的生命去换取你一世的迷恋。
+            </div>
+            <svg class="header__down" id="headerDown" viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M15.992 25.304c-0 0-0 0-0.001 0-0.516 0-0.981-0.216-1.31-0.563l-0.001-0.001-14.187-14.996c-0.306-0.323-0.494-0.76-0.494-1.241 0-0.998 0.809-1.807 1.807-1.807 0.517 0 0.983 0.217 1.313 0.565l0.001 0.001 12.875 13.612 12.886-13.612c0.331-0.348 0.797-0.565 1.314-0.565 0.481 0 0.918 0.187 1.242 0.493l-0.001-0.001c0.723 0.687 0.755 1.832 0.072 2.555l-14.201 14.996c-0.33 0.348-0.795 0.564-1.311 0.564-0.001 0-0.003 0-0.004 0h0z"></path>
+            </svg>
+        </div>
+    </header>
+    <div class="side__menu">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+        </svg>
+        <span>
+            &nbsp; menu
+        </span>
+    </div>
+    <div class="side__main">
+        <div class="side__bg"></div>
+        <div class="side__panel">
+            <svg class="side__close ft__a" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 20 20">
+                <path d="M18.362 19.324c-0.902 0.902-2.363 0.902-3.263 0l-5.098-5.827-5.098 5.825c-0.902 0.902-2.363 0.902-3.263 0-0.902-0.902-0.902-2.363 0-3.263l5.304-6.057-5.306-6.061c-0.902-0.902-0.902-2.361 0-3.263s2.361-0.902 3.263 0l5.1 5.829 5.098-5.829c0.902-0.902 2.361-0.902 3.263 0s0.902 2.363 0 3.263l-5.304 6.061 5.304 6.057c0.902 0.902 0.902 2.363 0 3.265z"></path>
+            </svg>
+
+            <div class="side__header">
+                <a href="https://github.com" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
+
+                <div class="side__meta">
+                    16 文章 <br>
+                    <span data-uvstaturl="https://github.com">0</span> 浏览
+                    
+                </div>
+            </div>
+
+            <div class="side__title">
+                <span>ღゝ◡╹)ノ❤️</span>
+            </div>
+            <ul class="side__nav">
+                <li>
+                    <a href="https://github.com" rel="start">
+                            奶瓶
+                    </a>
+                </li>
+                    <li>
+                        <a href="/my-github-repos" target="_self"><img
+                                class="page-icon" src="/images/github-icon.png" alt="我的开源">我的开源</a>
+                    </li>
+                <li>
+                    <a href="https://github.com/categories.html">分类</a>
+                </li>
+                <li>
+                    <a href="https://github.com/tags.html">标签墙</a>
+                </li>
+                <li>
+                    <a href="https://github.com/archives.html">存档</a>
+                </li>
+                <li>
+                    <a href="https://github.com/links.html">友情链接</a>
+                </li>
+                <li>
+                    <a rel="alternate" href="https://github.com/rss.xml">RSS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="article__top" style="background-image: url(https://img.hacpai.com/bing/20180723.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)">
+        <div style="background-image: url(https://img.hacpai.com/bing/20180723.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)"></div>
+        <canvas id="articleTop"></canvas>
+    </div>
+    <div class="article">
+        <div class="ft__center">
+            <div class="article__meta">
+                <time>
+                    2020-02-25
+                </time>
+                /
+                    <a rel="tag"
+                       href="https://github.com/tags/Redis">Redis</a> &nbsp;
+            </div>
+            <h2 class="article__title">
+                redis 集群搭建
+                    <sup>
+                        置顶！
+                    </sup>
+            </h2>
+<div class="article__share"
+     data-title="redis 集群搭建"
+     data-blogtitle="奶瓶"
+     data-url="https://github.com/articles/2020/02/25/1582643975456.html"
+     data-avatar="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100">
+    <span class="item" data-type="qqz">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M22.824 13.989l-8.348 6.287s3.351 0.522 8.404 0.461l-0.23-1.040 7.2-6.549c0.132-0.12 0.183-0.312 0.129-0.487s-0.203-0.299-0.377-0.314l-9.492-0.856-3.708-9.213c-0.068-0.169-0.226-0.279-0.401-0.279s-0.333 0.11-0.401 0.279l-3.708 9.213-9.492 0.856c-0.174 0.015-0.323 0.139-0.377 0.314s-0.004 0.366 0.129 0.487l7.2 6.549-2.158 9.742c-0.040 0.178 0.026 0.365 0.168 0.474 0.142 0.107 0.331 0.115 0.481 0.021l8.158-5.165 8.158 5.165c0.070 0.045 0.147 0.066 0.225 0.066 0.090 0 0.18-0.029 0.256-0.086 0.142-0.109 0.208-0.295 0.168-0.474l-1.707-7.704c0.732-0.386 1.538-1.040 1.538-1.040s-3.195 1.638-14.664 0.838l8.312-6.325s-0.327-0.534-10.744-0.914c-0.697-0.026 8.493-1.83 15.281-0.305z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="wechat">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="weibo">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M13.444 27.064c-5.3 0.525-9.875-1.875-10.219-5.35-0.344-3.481 3.675-6.719 8.969-7.244 5.3-0.525 9.875 1.875 10.212 5.35 0.35 3.481-3.669 6.725-8.963 7.244zM24.038 15.521c-0.45-0.137-0.762-0.225-0.525-0.819 0.512-1.287 0.563-2.394 0.006-3.188-1.038-1.481-3.881-1.406-7.137-0.037 0 0-1.025 0.444-0.762-0.363 0.5-1.613 0.425-2.956-0.356-3.737-1.769-1.769-6.469 0.069-10.5 4.1-3.013 3.006-4.763 6.212-4.763 8.981 0 5.287 6.787 8.506 13.425 8.506 8.7 0 14.494-5.056 14.494-9.069 0-2.431-2.044-3.806-3.881-4.375z"></path>
+            <path d="M29.819 5.833c-2.1-2.331-5.2-3.219-8.063-2.612v0c-0.663 0.144-1.081 0.794-0.938 1.45 0.144 0.662 0.788 1.081 1.45 0.938 2.038-0.431 4.238 0.2 5.731 1.856s1.9 3.913 1.256 5.888v0c-0.206 0.644 0.144 1.331 0.788 1.544 0.644 0.206 1.331-0.144 1.544-0.787v-0.006c0.9-2.762 0.331-5.938-1.769-8.269z"></path>
+            <path d="M26.588 8.752c-1.025-1.138-2.538-1.569-3.925-1.269-0.569 0.119-0.931 0.688-0.813 1.256 0.125 0.569 0.688 0.931 1.25 0.806v0c0.681-0.144 1.419 0.069 1.919 0.619 0.5 0.556 0.637 1.313 0.419 1.975v0c-0.175 0.55 0.125 1.15 0.681 1.331 0.556 0.175 1.15-0.125 1.331-0.681 0.438-1.356 0.163-2.906-0.863-4.037z"></path>
+            <path d="M13.738 20.771c-0.188 0.319-0.594 0.469-0.912 0.337-0.319-0.125-0.412-0.488-0.231-0.794 0.188-0.306 0.581-0.456 0.894-0.337 0.313 0.113 0.425 0.469 0.25 0.794zM12.044 22.933c-0.512 0.819-1.613 1.175-2.438 0.8-0.813-0.369-1.056-1.319-0.544-2.119 0.506-0.794 1.569-1.15 2.388-0.806 0.831 0.356 1.1 1.3 0.594 2.125zM13.969 17.146c-2.519-0.656-5.369 0.6-6.463 2.819-1.119 2.262-0.037 4.781 2.506 5.606 2.638 0.85 5.75-0.456 6.831-2.894 1.069-2.394-0.262-4.85-2.875-5.531z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="twitter">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32.003 6.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
+        </svg>
+    </span>
+    <span class="item__qr"></span>
+</div>        </div>
+        <div class="wrapper">
+            <section class="vditor-reset articles article__content">
+                <p><img src="https://img.hacpai.com/bing/20180723.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<p>Redis 是啥？用 Redis 官方的话来说就是：</p>
+<blockquote>
+<p><em>Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.</em></p>
+</blockquote>
+<p>Redis 是一个开源的、<strong>基于内存</strong>的<strong>数据结构存储器</strong>，可以用作<strong>数据库</strong>、<strong>缓存</strong>和<strong>消息中间件</strong>。</p>
+<p>What??? 这玩意把数据放在内存，还想当数据库使？为什么是“data structure store”，而不是“data store”？还能用作消息中间件？？你这么牛，你咋不上天？</p>
+<p>是的，Redis 就是这么牛 (￣▽￣)~*</p>
+<p>我们只需从 Redis 最常用的功能——缓存，开始了解，上面那些问题也就迎刃而解了。</p>
+<blockquote>
+<p><em>如果你是 Redis 新手，或者此前从未接触过 Redis，那么这篇文章不仅能帮你快速了解 Redis 的实现原理，还能帮你了解一些架构设计的艺术；如果你是 Redis 老司机，那么，希望这篇文章能带给你一些新的东西。</em></p>
+</blockquote>
+<h2 id="toc_h2_0">你会怎样实现一个缓存？</h2>
+<p>假设让你设计一个缓存，你会怎么做？</p>
+<p>相信大家都会想到用<strong>Map</strong>来实现，就像这样：</p>
+<pre><code class="language-java">// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+// get value from cache
+StringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringString                                    valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue                                  =================================                                mapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmapmap..............................getgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetgetget(((((((((((((((((((((((((((("someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey""someKey"););););););););););););););););););););););););););
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ifififififififififififififififififififififififif(((((((((((((((((((((((nullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnullnull                     ========================================                   valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue)))))))))))))))))                {{{{{{{{{{{{{{{
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ // get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+// get value from DataBase
+           valuevaluevaluevaluevaluevaluevaluevaluevaluevalue         ========       queryValueFromDBqueryValueFromDBqueryValueFromDBqueryValueFromDBqueryValueFromDBqueryValueFromDB((((("someKey""someKey""someKey""someKey");););
+
+}
+</code></pre>
+<p>那用什么 Map 呢？HashMap、TreeMap 这些都线程不安全，那就用 HashTable 或者 ConcurrentHashMap 好了。</p>
+<p>**不管你用什么样的 Map，它的背后都是 key-value 的 Hash 表结构，目的就是为了实现 O(1)复杂度的查找算法，**Redis 也是这样实现的，另一个常用的缓存框架 Memcached 也是。</p>
+<p>Hash 表的数据结构是怎样的呢？相信很多人都知道，这里简单画个图：</p>
+<figure data-size="normal"><img src="https://pic1.zhimg.com/80/v2-84e2b36df3700de8417fa052b3ac19b8_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="990" data-rawheight="442" class="origin_image zh-lightbox-thumb lazy" width="990" data-original="https://pic1.zhimg.com/v2-84e2b36df3700de8417fa052b3ac19b8_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-84e2b36df3700de8417fa052b3ac19b8_b.jpg" data-lazy-status="ok"></figure>
+<p>简单说，<strong>Hash 表就是一个数组，而这个数组的元素，是一个链表</strong>。</p>
+<p>为什么元素是链表？理论上，如果我们的数组可以做成无限大，那么每来一个 key，我们都可以把它放到一个新的位置。但是这样很明显不可行，<strong>数组越大，占用的内存就越大</strong>。</p>
+<p>所以我们需要限制数组的大小，假设是 16，那么计算出 key 的 hash 值后，对 16 取模，得出一个 0~15 的数，然后放到数组对应的位置上去。</p>
+<p>好，现在 key1 放到 index 为 2 的位置，突然又来了一个 key9，刚好他也要放到 index 为 2 的位置，那咋办，总不能把人家 key1 给踢掉吧？所以 key1 的信息必须存储在一个链表结构里面，这样 key9 来了之后，只需要把 key1 所在的链表节点的 next，指向 key9 的链表节点即可。</p>
+<p>这样就没问题了吗？想象一下，如果链表越来越长，会有什么问题？</p>
+<p>很明显，链表越长，Hash 表的查询、插入、删除等操作的性能都会下降，极端情况下，如果全部元素都放到了一个链表里头，复杂度就会降为<strong>O(n)</strong>，也就和顺序查找算法无异了。（正因如此，Java8 里头的 HashMap 在元素增长到一定程度时会从链表转成一颗红黑树，来减缓查找性能的下降）</p>
+<p>怎么解决？<strong>rehash</strong>。</p>
+<p>关于 rehash，这里就不细讲了，大家可以先了解一下 Java HashMap 的 resize 函数，然后再通过这篇文章：<a href="https://link.zhihu.com/?target=https%3A//medium.com/%40kousiknath/a-little-internal-on-redis-key-value-storage-implementation-fdf96bac7453" target="_blank">A little internal on redis key value storage implementationhttps://link.zhihu.com/?target=https%3A//medium.com/%40kousiknath/a-little-internal-on-redis-key-value-storage-implementation-fdf96bac7453</a> 去了解 Redis 的 rehash 算法，你会惊讶的发现 Redis 里头居然是两个 HashTable。</p>
+<p>好，上面带大家从一个及其微观的角度窥视了 Redis，下面几个小节，再带大家用宏观的视角去观察 Redis。</p>
+<h2 id="toc_h2_1">C/S 架构</h2>
+<p>作为 Redis 用户，我们要怎样把数据放到上面提到的 Hash 表里呢？</p>
+<p>我们可以通过 Redis 的命令行，当然也可以通过各种语言的 Redis API，在代码里面对 Hash 表进行操作，这些都是 Redis 客户端（Client），而 Hash 表所在的是 Redis 服务端（Server），也就是说 Redis 其实是一个 C/S 架构。</p>
+<p>显然，Client 和 Server 可以是在一台机器上的，也可以不在：</p>
+<figure data-size="normal"><img src="https://pic2.zhimg.com/80/v2-d67c538b3a759800eb8102b5eeefee01_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="544" data-rawheight="286" class="origin_image zh-lightbox-thumb lazy" width="544" data-original="https://pic2.zhimg.com/v2-d67c538b3a759800eb8102b5eeefee01_r.jpg" data-actualsrc="https://pic2.zhimg.com/v2-d67c538b3a759800eb8102b5eeefee01_b.jpg" data-lazy-status="ok"></figure>
+<p>如果你想玩一下 Redis，又不想自己搭建环境，可以试一下这一个非常好玩的网页：<a href="https://link.zhihu.com/?target=http%3A//try.redis.io/" target="_blank">Try Redishttps://link.zhihu.com/?target=http%3A//try.redis.io/</a>，你可以按照上面的提示，熟悉 Redis 的基础命令，感受一下 Redis 的 C/S 模式。</p>
+<p>值得一提的是，<strong>Redis 的 Server 是单线程服务器</strong>，基于<strong>Event-Loop 模式</strong>来处理 Client 的请求，这一点和 NodeJS 很相似。使用单线程的好处包括：</p>
+<ul>
+<li>**不必考虑线程安全问题。**很多操作都不必加锁，既简化了开发，又提高了性能；</li>
+<li>**减少线程切换损耗的时间。**线程一多，CPU 在线程之间切来切去是非常耗时的，单线程服务器则没有了这个烦恼；</li>
+</ul>
+<p>当然，单线程服务器最大的问题自然是无法充分利用多处理器，不过没关系，别忘了现在的机器很便宜。请继续往下看。</p>
+<h2 id="toc_h2_2">集群</h2>
+<p>好，现在我们已经知道了 Redis 是一个 C/S 架构的框架，那就让我们开始用 Redis 来缓存信息，缓解数据库的压力吧！</p>
+<p>我们搭起了这样一个框架，一台客户端，一台 Redis 缓存服务器：</p>
+<figure data-size="normal"><img src="https://pic2.zhimg.com/80/v2-3612d32d4a39ee7b8c8172503cdb00d1_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="288" data-rawheight="369" class="content_image lazy" width="288" data-actualsrc="https://pic2.zhimg.com/v2-3612d32d4a39ee7b8c8172503cdb00d1_b.jpg" data-lazy-status="ok"></figure>
+<p>一开始风和日丽，系统运行良好。</p>
+<p>后来，我们系统中使用 Redis 的客户端越来越多，变成了这样：</p>
+<figure data-size="normal"><img src="https://pic1.zhimg.com/80/v2-32a30ea28019c70ca12cae09083ee3f8_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="288" data-rawheight="369" class="content_image lazy" width="288" data-actualsrc="https://pic1.zhimg.com/v2-32a30ea28019c70ca12cae09083ee3f8_b.jpg" data-lazy-status="ok"></figure>
+<p>这带来了两个问题：</p>
+<ul>
+<li><strong>Redis 内存不足</strong>：随着使用 Redis 的客户端越来越多，Redis 上的缓存数据也越来越大，而一台机器的内存毕竟是有限的，放不了那么多数据；</li>
+<li><strong>Redis 吞吐量低</strong>：客户端变多了，可 Redis 还是只有一台，而且我们已经知道，Redis 是单线程的！这就好比我开了一家饭店，一开始每天只有 100 位客人，我雇一位服务员就可以，后来生意好了，每天有 1000 位客人，可我还是只雇一位服务员。<strong>一台机器的带宽和处理器都是有限的</strong>，Redis 自然会忙不过来，吞吐量已经不足以支撑我们越来越庞大的系统。</li>
+</ul>
+<p>分析完问题，解决思路也就再清晰不过了——<strong>集群</strong>。一台 Redis 不够，那就再加多几台！</p>
+<figure data-size="normal"><img src="https://pic1.zhimg.com/80/v2-3ea442fd9cfba7ae0569f40e764dd8f0_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="815" data-rawheight="381" class="origin_image zh-lightbox-thumb lazy" width="815" data-original="https://pic1.zhimg.com/v2-3ea442fd9cfba7ae0569f40e764dd8f0_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-3ea442fd9cfba7ae0569f40e764dd8f0_b.jpg" data-lazy-status="ok"></figure>
+<p>客户端的请求会通过负载均衡算法（通常是一致性 Hash），分散到各个 Redis 服务器上。<br>
+通过集群，我们实现了两个特性：</p>
+<ul>
+<li><strong>扩大缓存容量；</strong></li>
+<li><strong>提升吞吐量；</strong></li>
+</ul>
+<p>解决了上面提到的两个问题。</p>
+<h2 id="toc_h2_3">主从复制</h2>
+<p>好，现在我们已经把 Redis 升级到了集群，真可谓效果杠杠的，可运行了一段时间后，运维又过来反馈了两个问题：</p>
+<ul>
+<li><strong>数据可用性差</strong>：如果其中一台 Redis 挂了，那么上面全部的缓存数据都会丢失，导致原来可以从缓存中获取的请求，都去访问数据库了，数据库压力陡增。</li>
+<li><strong>数据查询缓慢</strong>：监测发现，每天有一段时间，Redis 1 的访问量非常高，而且大多数请求都是去查一个相同的缓存数据，导致 Redis 1 非常忙碌，吞吐量不足以支撑这个高的查询负载。</li>
+</ul>
+<p>问题分析完，要想解决可用性问题，我们第一个想到的，就是数据库里头经常用到的<strong>Master-Slave 模式</strong>，于是，我们给每一台 Redis 都加上了一台 Slave：</p>
+<figure data-size="normal"><img src="https://pic4.zhimg.com/80/v2-b971a5e0d88583cdb8c5c550b5e5b2ab_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="815" data-rawheight="491" class="origin_image zh-lightbox-thumb lazy" width="815" data-original="https://pic4.zhimg.com/v2-b971a5e0d88583cdb8c5c550b5e5b2ab_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-b971a5e0d88583cdb8c5c550b5e5b2ab_b.jpg" data-lazy-status="ok"></figure>
+<p>通过 Master-Slave 模式，我们又实现了两个特性：</p>
+<ul>
+<li><strong>数据高可用</strong>：Master 负责接收客户端的写入请求，将数据写到 Master 后，同步给 Slave，实现数据备份。一旦 Master 挂了，可以将 Slave 提拔为 Master；</li>
+<li><strong>提高查询效率</strong>：一旦 Master 发现自己忙不过来了，可以把一些查询请求，转发给 Slave 去处理，也就是 Master 负责读写或者只负责写，Slave 负责读；</li>
+</ul>
+<p>为了让 Master-Slave 模式发挥更大的威力，我们当然可以放更多的 Slave，就像这样：</p>
+<figure data-size="normal"><img src="https://pic4.zhimg.com/80/v2-76238e772c8bb5feaa5bb20e4207cfcf_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="791" data-rawheight="378" class="origin_image zh-lightbox-thumb lazy" width="791" data-original="https://pic4.zhimg.com/v2-76238e772c8bb5feaa5bb20e4207cfcf_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-76238e772c8bb5feaa5bb20e4207cfcf_b.jpg" data-lazy-status="ok"></figure>
+<p>可这样又引发了另一个问题，那就是 Master 进行数据备份的工作量变大了，Slava 每增加一个，Master 就要多备份一次，于是又有了<strong>Master/slave chains</strong>的架构：</p>
+<figure data-size="normal"><img src="https://pic1.zhimg.com/80/v2-eb813169598035287738730a5f53c2cc_1440w.jpg" data-caption="" data-size="normal" data-rawwidth="761" data-rawheight="473" class="origin_image zh-lightbox-thumb lazy" width="761" data-original="https://pic1.zhimg.com/v2-eb813169598035287738730a5f53c2cc_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-eb813169598035287738730a5f53c2cc_b.jpg" data-lazy-status="ok"></figure>
+<p>没错，我们让 Slave 也有自己的 Slave，有点像古代的分封制。</p>
+<p>这样最顶层的 Master 的备份压力就没那么大了，它只需要备份两次，然后让那它底下的那两台 Slave 再去和他们的 Slave 备份。</p>
+<blockquote>
+<p><em>关于 Master/slave chains，大家可以参考这篇文章</em> <em><a href="https://link.zhihu.com/?target=https%3A//redislabs.com/ebook/part-2-core-concepts/chapter-4-keeping-data-safe-and-ensuring-performance/4-2-replication/4-2-3-masterslave-chains/" target="_blank">RedisLab Master/slave chainshttps://link.zhihu.com/?target=https%3A//redislabs.com/ebook/part-2-core-concepts/chapter-4-keeping-data-safe-and-ensuring-performance/4-2-replication/4-2-3-masterslave-chains/</a></em></p>
+</blockquote>
+<h2 id="toc_h2_4">Redis 没那么简单</h2>
+<p>这篇文章只是带大家逛一逛 Redis 的庄园，让大家从微观到宏观，对 Redis 有一个初步的了解。</p>
+<p>事实上，Redis 内部要处理的问题还有很多：</p>
+<ul>
+<li>**数据结构。**文章一开头提到了，Redis 不仅仅是数据存储器，而是数据结构存储器。那是因为 Redis 支持客户端直接往里面塞各种类型的数据结构，比如 String、List、Set、SortedSet、Map 等等。你或许会问，这很了不起吗？我自己在 Java 里写一个 HashTable 不也可以放各种数据结构？呵呵，要知道你的 HashTable 只能放 Java 对象，人家那可是支持多语言的，不管你的客户端是 Java 还是 Python 还是别的，都可以往 Redis 塞数据结构。这一点也是 Redis 和 Memcached 相比，非常不同的一点。当然 Redis 要支持数据结构存储，是以牺牲更多内存为代价的，正所谓有利必有弊。关于 Redis 里头的数据结构，大家可以参考：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/data-types-intro" target="_blank">Redis Data Typeshttps://link.zhihu.com/?target=https%3A//redis.io/topics/data-types-intro</a></li>
+<li>**剔除策略。**缓存数据总不能无限增长吧，总得剔除掉一些数据，好让新的缓存数据放进来吧？这就需要 LRU 算法了，大家可以参考：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/lru-cache" target="_blank">Redis Lru Cachehttps://link.zhihu.com/?target=https%3A//redis.io/topics/lru-cache</a></li>
+<li><strong>负载均衡</strong>。用到了集群，就免不了需要用到负载均衡，用什么负载均衡算法？在哪里使用负载均衡？这点大家可以参考：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/partitioning" target="_blank">Redis Partitioninghttps://link.zhihu.com/?target=https%3A//redis.io/topics/partitioning</a></li>
+<li>**Presharding。**如果一开始只有三台 Redis 服务器，后来发现需要加多一台才能满足业务需要，要怎么办？Redis 提供了一种策略，叫：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/partitioning%23presharding" target="_blank">Preshardinghttps://link.zhihu.com/?target=https%3A//redis.io/topics/partitioning%23presharding</a></li>
+<li>**数据持久化。**如果我的机器突然全部断电了，我的缓存数据还能恢复吗？Redis 说，相信我，可以的，不然我怎么用作数据库？去看看这个：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/persistence" target="_blank">Redis Persistencehttps://link.zhihu.com/?target=https%3A//redis.io/topics/persistence</a></li>
+<li>**数据同步。**这篇文章里提到了主从复制，那么 Redis 是怎么进行主从复制的呢？根据 CAP 理论，既然我们已经选择了集群，也就是 P，分区容忍性，那么剩下那两个，Consistency 和 Availability 只能选择一个了，那么 Redis 到底是支持最终一致性还是强一致性呢？可以参考：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/replication" target="_blank">Redis Replicationhttps://link.zhihu.com/?target=https%3A//redis.io/topics/replication</a></li>
+</ul>
+<h2 id="toc_h2_5">单机安装</h2>
+<p>环境：CentOS7</p>
+<p>Redis 版本：4.0.11</p>
+<ol>
+<li>下载安装包</li>
+</ol>
+<pre><code class="language-shell">wget http://download.redis.io/releases/redis-4.0.10.tar.gz
+</code></pre>
+<p>下载方式很多，官网下载安装包再通过 shell 工具上传 服务器，wegt 命令，或者简单一点的 yum 安装（<strong>安装目录不好找 不建议使用</strong>）</p>
+<p><strong>版本 5.0 以下版本 做集群是通过 Ruby 做集群，5.0 之后不再使用 Ruby 。当前 使用 4.0 版本</strong></p>
+<p><img src="https://img.hacpai.com/file/2020/02/image-134ae95c.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"><strong>2.解压 安装包</strong></p>
+<pre><code>tar -zxvf redis-4.0.11.tar.gz
+</code></pre>
+<p>重命名</p>
+<pre><code>mv redis-4.0.11.tar.gz redis
+</code></pre>
+<p>3.进入 Redis 目录</p>
+<pre><code class="language-shell">cd redis
+</code></pre>
+<p>4.编译文件（由于我们下载的是 Redis 源码 ）</p>
+<pre><code class="language-shell">make
+</code></pre>
+<p>5.初始化</p>
+<pre><code class="language-shell">make install
+</code></pre>
+<p>编译后目录结构如下：</p>
+<p><img src="https://img.hacpai.com/file/2020/02/image-e23476f7.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>启动：</p>
+<p>进入 src 目录下</p>
+<pre><code class="language-shell">cd src
+</code></pre>
+<p>执行</p>
+<pre><code class="language-shell">./redis-server ../redis.conf
+</code></pre>
+<p>单机版 Redis 启动成功</p>
+<p>默认端口 <strong>6379</strong>  你就可以开心的通过代码<strong>本地</strong>连接了。（允许他机连接 在集群中会讲到）</p>
+<h2 id="toc_h2_6"><strong>集群安装</strong></h2>
+<p>搭建端口为 7000-》7005 的节点</p>
+<p>先在 Redis 同级目录下新建 redis-cluster 文件夹</p>
+<pre><code class="language-shell">mkdir redis-cluster
+
+cd redis-cluster
+</code></pre>
+<p>新建 6 个文件夹</p>
+<pre><code class="language-shell">mkdir 7000 7001 7002 7003 7004 7005
+</code></pre>
+<p><img src="https://img.hacpai.com/file/2020/02/image-6692c7d6.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>将 Redis 文件夹下的 redis.config 分别复制到新建的文件夹下（7000--7005） 每个文件夹下都要有</p>
+<pre><code class="language-shell">port  7000                                        //端口 和你的文件夹名称保持一致        
+#bind 10.93.84.53                                     //默认ip为127.0.0.1 需要改为其他节点机器可访问的ip 否则创建集群时无法访问对应的端口，无法创建集群 这里注释掉 就可以允许任何机器连接你的redis（前提你得有公网ip，其他人可以通过公网ip访问你的服务器redis）
+daemonize    yes                               //redis后台运行
+pidfile  /usr/local/redis-cluster/7000/redis_7000.pid          //pidfile文件 放在文件夹下（7000-7005） 下 方便管理
+cluster-enabled  yes                           //开启集群  把注释#去掉
+cluster-config-file  nodes_7000.conf   //集群的配置  配置文件首次启动自动生成 7000,7001,7002 默认放在src目录下 可更改
+cluster-node-timeout  15000                //请求超时  默认15秒，可自行设置
+appendonly  yes                           //aof日志开启  有需要就开启，它会每次写操作都记录一条日志　
+</code></pre>
+<p>7000--》7005 目录下都放好 Redis.conf 后</p>
+<h1 id="toc_h1_7">重点来了</h1>
+<p>分别启动 6 个节点</p>
+<p>/usr/redis/src/redis-server /usr/redis-cluster//7000/redis.conf</p>
+<p>格式：src 下 redis-server+ 空格 + 你的 Redis 配置文件（我刚刚在 7000--》7005 配置了每个节点的配置文件，所以指定它执行节点下配置文件）</p>
+<p>查看启动情况：</p>
+<pre><code class="language-shell">ps -aux | grep redis
+</code></pre>
+<p><img src="https://img.hacpai.com/file/2020/02/image-b1c0fed1.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>如果节点配置文件启动错了，通过 kill 杀死进程 重启某个节点</p>
+<p>kill -9 5392</p>
+<p><img src="https://img.hacpai.com/file/2020/02/image-63975843.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>进入 Redis src 目录下</p>
+<p>找到 redis-trib.rb 若没找到，说明你没有安装 Ruby</p>
+<p>**因为 redis-trib.rb 是有 Ruby 语言编写的所以需要安装 Ruby 环境<br>
+**</p>
+<p>因为 redis-trib.rb 是有 Ruby 语言编写的所以需要安装 Ruby 环境</p>
+<pre><code class="language-shell">span
+</code></pre>
+<p><img src="https://img-blog.csdn.net/20170303080604944" alt="https://img-blog.csdn.net/20170303080604944"></p>
+<h2 id="toc_h2_8"><strong>做集群</strong></h2>
+<pre><code>./redis-trib.rb create --replicas 1 ip:7000 ip:7001 ip:7002 ip:7003 ip:7004 ip:7005
+</code></pre>
+<p>重点：</p>
+<ol>
+<li><strong>本人使用的是阿里云服务器（会有公网，内网 ip 之分） 如果说 你只想本机访问 这里 ip 为你的内网 Ip，若想做到谁用谁连接 ip 必须为公网 ip（实测）。</strong></li>
+<li><strong>阿里云的端口需要你在控制台，自己开放（7000-》7005），但是你还有开放（17000-17005） 1700 为集群总线端口，若不开放，你是访问不到你的集群的。</strong></li>
+</ol>
+<p>若只是本地做的集群，ip 为 127.0.0.1 就好</p>
+<p>之后会有一个图像问答界面（大致就是你是否确定将几个 Redis 做成集群），yes 就好（手动输入的）。</p>
+<p><img src="https://img.hacpai.com/file/2020/02/image-423ca3d5.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>ok 大功告成，开心的去玩耍吧。</p>
+<p><strong>每次启动太麻烦，要是有个脚本多好，走着！</strong></p>
+<pre><code class="language-shell">redis_path="/usr/redis/redis/src"
+cluster_num=`ps aux | grep redis |  wc -l`
+if [ "${cluster_num}" -le 0 ]
+then
+        echo -e "===== Success: Has killed all cluster progress."
+else
+        pkill -9 redis
+fi
+
+cd ${redis_path}
+rm -rf ${redis_path}/appendonly.aof
+rm -rf ${redis_path}/dump.rdb
+rm -rf ${redis_path}/nodes*
+rm -rf ${redis_path}nodes*
+rm -rf ${redis_path}appendonly.aof
+cd /usr/redis/redis/src
+redis-server /usr/redis/7000/redis.conf
+cd /usr/redis/redis/src
+redis-server /usr/redis/7001/redis.conf
+cd /usr/redis/redis/src
+redis-server /usr/redis/7002/redis.conf
+cd /usr/redis/redis/src
+redis-server /usr/redis/7003/redis.conf
+cd /usr/redis/redis/src 
+redis-server /usr/redis/7004/redis.conf
+cd /usr/redis/redis/src 
+redis-server /usr/redis/7005/redis.conf
+
+</code></pre>
+<p>根据自己配置的路径做些改动就 ok 了。</p>
+                    <div>
+                        <hr>
+
+标题：redis 集群搭建<br>
+作者：<a href="www.alexli.com.cn" target="_blank">alex18595752445</a><br>
+地址：<a href="www.alexli.com.cn" target="_blank">https://github.com/articles/2020/02/25/1582643975456.html</a><br>
+
+<!-- 签名档内可使用 HTML、JavaScript -->
+<br>
+                    </div>
+            </section>
+        </div>
+
+    </div>
+        <div class="post__toc">
+<ul class="article__toc">
+        <li class="toc__h2">
+            <a href="#toc_h2_0">你会怎样实现一个缓存？</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_1">C/S 架构</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_2">集群</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_3">主从复制</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_4">Redis 没那么简单</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_5">单机安装</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_6">集群安装</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_7">重点来了</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_8">做集群</a>
+        </li>
+</ul>        </div>
+        <div id="b3logsolocomments"></div>
+        <div class="wrapper">
+            <div id="vcomment"
+                 style="    margin-bottom: 40px; margin-top: 80px;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 5px;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 20px;"
+                 data-name="alex18595752445" data-postId="1582643975456"></div>
+        </div>
+    <div class="article__bottom">
+        <div class="wrapper">
+            <div class="fn__flex">
+                <div class="item" id="randomArticles"></div>
+                <div class="item" id="relevantArticles"></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/TweenMax.min.js?1583580097307"
+        charset="utf-8"></script>
+<footer class="footer">
+    <div class="wrapper">
+            <a href="https://hacpai.com/member/alex18595752445"
+       title="https://hacpai.com/member/alex18595752445"
+       class="user__site"
+       target="_blank" rel="noopener nofollow">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path fill="#d23f31" style="fill: var(--color1, #d23f31)" d="M5.787 17.226h17.033l5.954 9.528c0.47 0.752 0.003 1.361-1.042 1.361h-15.141z"></path>
+            <path d="M10.74 3.927h17.033c1.045 0 1.512 0.609 1.042 1.361l-5.954 9.528h-19.872l6.379-10.209c0.235-0.376 0.849-0.681 1.372-0.681z"></path>
+            <path d="M2.953 17.226h2.839l6.804 10.889h-1.892c-0.523 0-1.137-0.305-1.372-0.681z"></path>
+        </svg>
+    </a>
+
+        <a href="https://github.com/alexhaoxuan"
+           title="https://github.com/alexhaoxuan"
+           class="user__site"
+           target="_blank" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M16 0.331c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"></path>
+            </svg>
+        </a>
+
+        <a href="tencent://message/?uin=948928501"
+           title="948928501"
+           target="_blank"
+           class="user__site" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M4.821 14.393c-0.125-0.304-0.143-0.607-0.143-0.929 0-0.5 0.321-1.304 0.625-1.679-0.018-0.464 0.179-1.411 0.536-1.714 0-3.304 2.554-7.464 5.536-8.893 1.839-0.875 3.768-1.179 5.786-1.179 1.571 0 3.286 0.375 4.75 0.982 4.196 1.768 5.143 5.054 6.036 9.25l0.018 0.089c0.518 0.786 0.982 1.714 0.982 2.679 0 0.482-0.321 0.964-0.321 1.393 0 0.036 0.107 0.179 0.125 0.214 1.536 2.268 2.929 4.732 2.929 7.554 0 0.625-0.339 2.804-1.339 2.804-0.696 0-1.464-1.696-1.714-2.161-0.018-0.018-0.036-0.018-0.054-0.018l-0.089 0.071c-0.571 1.482-1.196 2.875-2.357 3.982 1.018 0.982 2.661 0.893 2.964 2.589-0.089 0.196-0.054 0.411-0.196 0.607-1.018 1.536-3.75 1.732-5.393 1.732-2.179 0-3.946-0.571-6-1.179-0.429-0.125-1.071-0.054-1.536-0.107-1.089 1.196-3.75 1.518-5.286 1.518-1.357 0-6.607-0.089-6.607-2.411 0-1 0.214-1.286 0.911-1.929 0.554-0.107 0.964-0.411 1.607-0.446 0.089 0 0.161-0.018 0.25-0.036 0.018-0.018 0.036-0.018 0.036-0.071l-0.036-0.054c-1.232-0.286-2.964-3.393-3.232-4.679l-0.089-0.054c-0.125 0-0.179 0.268-0.214 0.357-0.393 0.911-1.321 1.893-2.357 2h-0.018c-0.143 0-0.089-0.143-0.196-0.179-0.25-0.589-0.411-1.125-0.411-1.786 0-3.571 1.714-6.214 4.5-8.321z"></path>
+            </svg>
+        </a>
+        <a href="javascript:void(0)"
+           class="user__site" title="wan948928501">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+            </svg>
+        </a>
+ <br>
+        &copy; 2020
+        <a href="https://github.com">奶瓶</a>
+        豫ICP备20003042号
+        <span class="footer__heart">❤️</span>
+        Powered by <a href="https://solo.b3log.org" target="_blank">Solo</a>
+        <br>
+        Theme Bubble
+        <sup>[<a href="https://www.cnblogs.com/jajian" target="_blank">ref</a>]</sup>
+        by <a href="http://vanessa.b3log.org" target="_blank">Vanessa</a> <br>
+    </div>
+</footer>
+<svg class="side__top" id="sideTop" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <path d="M26.562 13.958c0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303v0c0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303v0zM23.305 10.7c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM20.022 7.417c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM29.67 0h-27.339c-0.677 0-1.228 0.551-1.228 1.228s0.551 1.228 1.228 1.228h11.151l-10.725 10.725c-0.476 0.476-0.476 1.253 0 1.729 0.226 0.226 0.551 0.351 0.852 0.351s0.626-0.125 0.852-0.351l10.074-10.074v25.936c0 0.677 0.551 1.228 1.228 1.228s1.228-0.551 1.228-1.228v-26.011c0.476 0.426 1.203 0.426 1.679-0.050s0.476-1.253 0-1.729l-0.576-0.576h11.577c0.677 0 1.228-0.551 1.228-1.228 0-0.626-0.551-1.178-1.228-1.178z"></path>
+</svg>
+<script>
+  var Label = {
+    servePath: "https://github.com",
+    staticServePath: "https://github.com",
+    luteAvailable: false,
+    hljsStyle: 'github',
+    langLabel: "zh_CN",
+    version: "3.9.0",
+    staticSite: true,
+    showCodeBlockLn: true,
+  }
+</script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/common.min.js?1583580097307"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/circleMagic.min.js?1583580097307"
+        charset="utf-8"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.css"/>
+<script async src="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.js"></script>
+<div class="solo-kanbanniang">
+    <div class="solo-kanbanniang__tip"></div>
+    <canvas id="soloKanbanniang" width="280" height="250"></canvas>
+    <div class="solo-kanbanniang__tool">
+        <svg id="soloKanbanniangHome" viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32 18.967l-16-12.42-16 12.42v-5.064l16-12.42 16 12.42zM28 18.516v12h-8v-8h-8v8h-8v-12l12-9z"></path>
+        </svg>
+        <svg id="soloKanbanniangRSS" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M320.364 768q0 45.728-32 77.728t-77.728 32-77.728-32-32-77.728 32-77.728 77.728-32 77.728 32 32 77.728zM612.94 838.272q1.152 16-9.728 27.424-10.272 12-26.848 12h-77.152q-14.272 0-24.576-9.44t-11.424-23.712q-12.576-130.848-105.44-223.712t-223.712-105.44q-14.272-1.152-23.712-11.424t-9.44-24.576V402.24q0-16.576 12-26.848 9.728-9.728 24.576-9.728h2.848q91.424 7.424 174.848 46.016t148 103.712q65.152 64.576 103.712 148t46.016 174.848z m292.576 1.152q1.152 15.424-10.272 26.848-10.272 11.424-26.272 11.424h-81.728q-14.848 0-25.44-10.016t-11.136-24.288q-6.848-122.848-57.728-233.44t-132.288-192-192-132.288-233.44-58.272q-14.272-0.576-24.288-11.136t-10.016-24.864V109.664q0-16 11.424-26.272 10.272-10.272 25.152-10.272h1.728q149.728 7.424 286.56 68.576t243.136 168q106.848 106.272 168 243.136t68.576 286.56z"></path>
+        </svg>
+        <svg id="soloKanbanniangChat" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M802.42709 96.163153H219.476155c-84.48109 0-154.896836 71.746044-154.896836 157.840888v393.119449c0 86.072331 70.415746 157.819398 154.896836 157.819399h214.038818V925.470963s22.526039 40.168862 64.767096 5.734608c30.965246-25.819039 126.721123-91.828428 171.775248-123.385145h132.369773c84.502579 0 154.896836-83.21526 154.896836-157.839865V251.125481c0-86.094844-70.394257-154.962328-154.896836-154.962328zM301.144176 518.002714c-39.427988 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044 39.426965 0 70.393233 31.577183 70.393234 71.746044 0 40.169885-30.966269 71.746044-70.393234 71.746044z m208.411657 0c-39.450501 0-70.415746-31.576159-70.415746-71.746044 0-40.168862 30.965246-71.746044 70.415746-71.746044 39.405475 0 70.394257 31.577183 70.394257 71.746044 0 40.169885-30.988782 71.746044-70.394257 71.746044z m211.203236 0c-39.426965 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044s70.415746 31.577183 70.415746 71.746044c-0.001023 40.169885-30.988782 71.746044-70.415746 71.746044z"></path>
+        </svg>
+        <svg id="soloKanbanniangChange" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M936.672 193.216l-226.88-64c-8.704-2.528-18.112-1.12-25.824 3.776-7.68 4.864-12.896 12.736-14.432 21.728C655.712 236.928 595.328 288 512 288c-71.424 0-142.464-103.296-163.776-143.104-7.136-13.28-22.528-19.84-37.024-15.68l-224 64C73.472 197.152 64 209.728 64 224v256a31.93 31.93 0 0 0 11.712 24.736c7.392 6.08 17.152 8.512 26.56 6.624L224 487.04V832c0 52.928 43.072 96 96 96h384c52.928 0 96-43.072 96-96V519.04l121.728 24.352c9.44 1.92 19.2-0.544 26.56-6.624C955.68 530.656 960 521.6 960 512V224c0-14.336-9.536-26.912-23.328-30.784zM672 800H352c-17.664 0-32-14.304-32-32s14.336-32 32-32h320c17.696 0 32 14.304 32 32s-14.304 32-32 32z"></path>
+        </svg>
+        <svg id="soloKanbanniangPhoto" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M898.048 258.048q23.552-1.024 46.592 9.216t40.96 27.136 28.672 39.424 10.752 46.08l0 390.144q0 24.576-10.752 47.104t-28.672 40.448-40.96 28.16-47.616 10.24l-697.344 0q-24.576 0-48.64-10.24t-42.496-27.648-29.696-40.448-11.264-48.64l0-381.952q0-22.528 10.752-45.568t28.672-41.472 39.936-30.208 44.544-11.776l63.488 0 13.312-83.968q3.072-20.48 18.432-32.768t34.816-12.288l456.704 0q19.456 0 34.304 10.752t16.896 34.304l14.336 83.968 54.272 0zM548.864 712.704q40.96 0 77.824-15.872t63.488-42.496 42.496-62.976 15.872-77.312-15.872-77.312-42.496-62.976-63.488-42.496-77.824-15.872-77.312 15.872-63.488 42.496-43.008 62.976-15.872 77.312 15.872 77.312 43.008 62.976 63.488 42.496 77.312 15.872z"></path>
+        </svg>
+        <svg id="soloKanbanniangGithub" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M1024 524.8c0 114.346667-32.554667 217.216-97.706667 308.565333-65.066667 91.306667-149.162667 154.538667-252.288 189.610667-11.989333 2.304-20.778667 0.682667-26.325333-4.778667a27.605333 27.605333 0 0 1-8.362667-20.48v-144.213333c0-44.16-11.52-76.501333-34.645333-97.024 25.344-2.730667 48.085333-6.826667 68.309333-12.288a268.629333 268.629333 0 0 0 62.72-26.666667 187.434667 187.434667 0 0 0 53.973334-45.44c14.421333-18.005333 26.197333-41.898667 35.328-71.765333 9.088-29.824 13.653333-64.128 13.653333-102.826667 0-55.125333-17.536-102.058667-52.650667-140.8 16.426667-41.429333 14.677333-87.893333-5.333333-139.392-12.458667-4.096-30.464-1.578667-54.016 7.509334a355.328 355.328 0 0 0-61.312 30.08L640 271.274667a462.336 462.336 0 0 0-128-17.749334c-43.989333 0-86.656 5.930667-128 17.749334a589.824 589.824 0 0 0-28.330667-18.432c-11.776-7.253333-30.336-16.042667-55.68-26.325334-25.344-10.24-44.416-13.312-57.301333-9.216-19.584 51.498667-21.12 97.962667-4.693333 139.434667-35.114667 38.698667-52.650667 85.632-52.650667 140.757333 0 38.698667 4.565333 72.874667 13.653333 102.485334 9.130667 29.610667 20.778667 53.546667 34.986667 71.765333 14.250667 18.218667 32.128 33.493333 53.674667 45.781333 21.546667 12.288 42.453333 21.205333 62.677333 26.666667 20.224 5.461333 43.008 9.557333 68.309333 12.288-17.749333 16.384-28.629333 39.850667-32.64 70.4a130.005333 130.005333 0 0 1-29.994666 10.24c-10.666667 2.261333-23.338667 3.413333-37.973334 3.413333-14.72 0-29.269333-4.906667-43.690666-14.677333-14.464-9.813333-26.794667-24.064-36.992-42.709333a109.226667 109.226667 0 0 0-32.341334-35.541334c-13.141333-9.130667-24.106667-14.592-33.024-16.426666l-13.312-2.048c-9.344 0-15.786667 1.024-19.328 3.072-3.584 2.090667-4.693333 4.693333-3.328 7.893333 1.28 3.157333 3.328 6.4 5.973334 9.557333 2.688 3.2 5.546667 5.930667 8.661333 8.192l4.693333 3.413334c9.770667 4.565333 19.413333 13.226667 29.013334 25.984 9.514667 12.757333 16.512 24.362667 20.992 34.858666l6.656 15.701334c5.76 17.322667 15.530667 31.317333 29.312 42.026666 13.781333 10.666667 28.672 17.536 44.672 20.48 16 2.986667 31.445333 4.565333 46.336 4.821334 14.890667 0.213333 27.221333-0.597333 36.992-2.389334l15.36-2.730666c0 17.28 0.085333 37.546667 0.298666 60.8l0.341334 36.906666a27.050667 27.050667 0 0 1-8.661334 20.48c-5.76 5.461333-14.677333 7.082667-26.666666 4.778667-103.125333-35.072-187.221333-98.261333-252.330667-189.610667C32.554667 742.058667 0 639.146667 0 524.8c0-95.232 22.869333-183.04 68.693333-263.466667A516.266667 516.266667 0 0 1 254.976 70.4C333.44 23.466667 419.114667 0 512 0c92.885333 0 178.56 23.466667 256.981333 70.4a516.266667 516.266667 0 0 1 186.368 190.976C1001.130667 341.802667 1024 429.653333 1024 524.842667z"></path>
+        </svg>
+        <svg id="soloKanbanniangClose" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M517.572566143763 1018.6748601482986C238.26554897656422 1018.6748601482986 11.897910175114305 792.2714997690043 11.897910175114305 513.0002041796496c0-279.3070171671984 226.36763880144977-505.71037754649296 505.6746559686481-505.71037754649296 279.2712955893538 0 505.6746559686481 226.40336037929444 505.6746559686481 505.71037754649296C1023.2472221124112 792.2714997690043 796.8795833109612 1018.6748601482986 517.572566143763 1018.6748601482986zM754.7281214542927 339.25044954334646c13.752807470184345-13.752807470184345 9.680547595895998-40.186775075214015-9.073280772537204-58.94060344364717l-2.143294670678079-2.1075730928334457c-18.7538283684332-18.7538283684332-45.15207439561819-22.861809820566194-58.90488186580257-9.073280772537204l-168.21291007038468 168.24863164822932-180.42968969324974-180.46541127109438c-13.967136937252159-13.967136937252159-40.72259874288353-9.823433907274534-59.72647815622916 9.216167083915742l-2.143294670678079 2.143294670678079c-19.039600991190277 19.003879413345654-23.111860865478626 45.75934121897699-9.180445506071107 59.655035000539876l180.42968969324974 180.46541127109438-176.07165719620428 176.03593561835962c-13.788529048028984 13.824250625873615-9.716269173740633 40.151053497369375 9.073280772537204 58.94060344364717l2.1075730928334457 2.1075730928334457c18.7538283684332 18.7538283684332 45.15207439561819 22.897531398410823 58.90488186580257 9.073280772537204l176.10737877404887-176.10737877404887 170.39192631890742 170.42764789675192c13.967136937252159 13.931415359407513 40.686877165038865 9.85915548511917 59.690756578384516-9.180445506071107l2.1790162485227142-2.1790162485227142c19.039600991190277-18.968157835501014 23.147582443323273-45.72361964113239 9.180445506071107-59.690756578384516l-170.39192631890742-170.42764789675192L754.7281214542927 339.25044954334646z"></path>
+        </svg>
+    </div>
+</div>
+
+    <svg viewBox="0 0 32 32" width="100%" height="100%" class="side__top side__top--toc">
+        <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+    </svg>
+
+<script type="text/javascript">
+    Util.addScript('https://github.com/js/page.min.js?1583580097307', 'soloPageScript')
+    var page = new Page({
+        "commentContentCannotEmptyLabel": "评论内容只能为 2 到 500 个字符！",
+        "oId": "1582643975456",
+        "blogHost": "https://github.com",
+        "randomArticles1Label": "随机阅读：",
+        "externalRelevantArticles1Label": "站外相关阅读："
+    });
+    $(document).ready(function () {
+        page.load();
+    page.tips.externalRelevantArticlesDisplayCount = "0";
+    Skin.initArticle()
+    });
+</script>
+
+</body>
+</html>
+
+<!-- Generated by Latke (https://github.com/88250/latke) in 96ms, 2020/03/18 18:15:19 -->

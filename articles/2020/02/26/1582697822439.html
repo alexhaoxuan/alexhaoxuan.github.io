@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>数据库表设计原则 - 奶瓶</title><meta name="description" content="参考： 数据库表结构设计方法及原则（li） - RunforLove - 博客园 http://www.cnblogs.com/RunForLove/p/5693986.html"/><meta property="og:description" content="参考： 数据库表结构设计方法及原则（li） - RunforLove - 博客园 http://www.cnblogs.com/RunForLove/p/5693986.html"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://github.com"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://github.com"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="数据库表设计原则 - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://github.com/articles/2020/02/26/1582697822439.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="数据库表设计原则 - 奶瓶" href="/opensearch.xml"><link href="https://github.com/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://github.com/manifest.json">        <link rel="canonical" href="https://github.com/articles/2020/02/26/1582697822439.html">        <link rel="stylesheet"
+              href="https://github.com/skins/Bubble/css/base.css?1583580097307"/>
+            <link rel="prev" title="redis 集群搭建" href="https://github.com/articles/2020/02/25/1582643975456.html">
+            <link rel="next" title="集合框架（一）集合基础知识" href="https://github.com/articles/2020/02/27/1582780977263.html">
+    </head>
+<body class="fn__flex-column">
+<div id="pjax" class="fn__flex-1">
+    
+    <progress class="fn__progress"></progress>
+    <header class="header header--article">
+        <div class="wrapper header__title">
+            <h1 class="header__h1 fn__flex-inline">
+                <a href="https://github.com" rel="start">奶瓶</a>
+            </h1>
+            <h2 class="header__desc header__desc--title">不会是在踩坑就是在踩坑的路上</h2>
+            <div class="header__desc">
+                愿意用三辈子如烟火般美丽的生命去换取你一世的迷恋。
+            </div>
+            <svg class="header__down" id="headerDown" viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M15.992 25.304c-0 0-0 0-0.001 0-0.516 0-0.981-0.216-1.31-0.563l-0.001-0.001-14.187-14.996c-0.306-0.323-0.494-0.76-0.494-1.241 0-0.998 0.809-1.807 1.807-1.807 0.517 0 0.983 0.217 1.313 0.565l0.001 0.001 12.875 13.612 12.886-13.612c0.331-0.348 0.797-0.565 1.314-0.565 0.481 0 0.918 0.187 1.242 0.493l-0.001-0.001c0.723 0.687 0.755 1.832 0.072 2.555l-14.201 14.996c-0.33 0.348-0.795 0.564-1.311 0.564-0.001 0-0.003 0-0.004 0h0z"></path>
+            </svg>
+        </div>
+    </header>
+    <div class="side__menu">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+        </svg>
+        <span>
+            &nbsp; menu
+        </span>
+    </div>
+    <div class="side__main">
+        <div class="side__bg"></div>
+        <div class="side__panel">
+            <svg class="side__close ft__a" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 20 20">
+                <path d="M18.362 19.324c-0.902 0.902-2.363 0.902-3.263 0l-5.098-5.827-5.098 5.825c-0.902 0.902-2.363 0.902-3.263 0-0.902-0.902-0.902-2.363 0-3.263l5.304-6.057-5.306-6.061c-0.902-0.902-0.902-2.361 0-3.263s2.361-0.902 3.263 0l5.1 5.829 5.098-5.829c0.902-0.902 2.361-0.902 3.263 0s0.902 2.363 0 3.263l-5.304 6.061 5.304 6.057c0.902 0.902 0.902 2.363 0 3.265z"></path>
+            </svg>
+
+            <div class="side__header">
+                <a href="https://github.com" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
+
+                <div class="side__meta">
+                    16 文章 <br>
+                    <span data-uvstaturl="https://github.com">0</span> 浏览
+                    
+                </div>
+            </div>
+
+            <div class="side__title">
+                <span>ღゝ◡╹)ノ❤️</span>
+            </div>
+            <ul class="side__nav">
+                <li>
+                    <a href="https://github.com" rel="start">
+                            奶瓶
+                    </a>
+                </li>
+                    <li>
+                        <a href="/my-github-repos" target="_self"><img
+                                class="page-icon" src="/images/github-icon.png" alt="我的开源">我的开源</a>
+                    </li>
+                <li>
+                    <a href="https://github.com/categories.html">分类</a>
+                </li>
+                <li>
+                    <a href="https://github.com/tags.html">标签墙</a>
+                </li>
+                <li>
+                    <a href="https://github.com/archives.html">存档</a>
+                </li>
+                <li>
+                    <a href="https://github.com/links.html">友情链接</a>
+                </li>
+                <li>
+                    <a rel="alternate" href="https://github.com/rss.xml">RSS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="article__top" style="background-image: url(https://img.hacpai.com/bing/20180201.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)">
+        <div style="background-image: url(https://img.hacpai.com/bing/20180201.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)"></div>
+        <canvas id="articleTop"></canvas>
+    </div>
+    <div class="article">
+        <div class="ft__center">
+            <div class="article__meta">
+                <time>
+                    2020-02-26
+                </time>
+                /
+                    <a rel="tag"
+                       href="https://github.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a> &nbsp;
+            </div>
+            <h2 class="article__title">
+                数据库表设计原则
+                    <sup>
+                        置顶！
+                    </sup>
+            </h2>
+<div class="article__share"
+     data-title="数据库表设计原则"
+     data-blogtitle="奶瓶"
+     data-url="https://github.com/articles/2020/02/26/1582697822439.html"
+     data-avatar="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100">
+    <span class="item" data-type="qqz">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M22.824 13.989l-8.348 6.287s3.351 0.522 8.404 0.461l-0.23-1.040 7.2-6.549c0.132-0.12 0.183-0.312 0.129-0.487s-0.203-0.299-0.377-0.314l-9.492-0.856-3.708-9.213c-0.068-0.169-0.226-0.279-0.401-0.279s-0.333 0.11-0.401 0.279l-3.708 9.213-9.492 0.856c-0.174 0.015-0.323 0.139-0.377 0.314s-0.004 0.366 0.129 0.487l7.2 6.549-2.158 9.742c-0.040 0.178 0.026 0.365 0.168 0.474 0.142 0.107 0.331 0.115 0.481 0.021l8.158-5.165 8.158 5.165c0.070 0.045 0.147 0.066 0.225 0.066 0.090 0 0.18-0.029 0.256-0.086 0.142-0.109 0.208-0.295 0.168-0.474l-1.707-7.704c0.732-0.386 1.538-1.040 1.538-1.040s-3.195 1.638-14.664 0.838l8.312-6.325s-0.327-0.534-10.744-0.914c-0.697-0.026 8.493-1.83 15.281-0.305z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="wechat">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="weibo">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M13.444 27.064c-5.3 0.525-9.875-1.875-10.219-5.35-0.344-3.481 3.675-6.719 8.969-7.244 5.3-0.525 9.875 1.875 10.212 5.35 0.35 3.481-3.669 6.725-8.963 7.244zM24.038 15.521c-0.45-0.137-0.762-0.225-0.525-0.819 0.512-1.287 0.563-2.394 0.006-3.188-1.038-1.481-3.881-1.406-7.137-0.037 0 0-1.025 0.444-0.762-0.363 0.5-1.613 0.425-2.956-0.356-3.737-1.769-1.769-6.469 0.069-10.5 4.1-3.013 3.006-4.763 6.212-4.763 8.981 0 5.287 6.787 8.506 13.425 8.506 8.7 0 14.494-5.056 14.494-9.069 0-2.431-2.044-3.806-3.881-4.375z"></path>
+            <path d="M29.819 5.833c-2.1-2.331-5.2-3.219-8.063-2.612v0c-0.663 0.144-1.081 0.794-0.938 1.45 0.144 0.662 0.788 1.081 1.45 0.938 2.038-0.431 4.238 0.2 5.731 1.856s1.9 3.913 1.256 5.888v0c-0.206 0.644 0.144 1.331 0.788 1.544 0.644 0.206 1.331-0.144 1.544-0.787v-0.006c0.9-2.762 0.331-5.938-1.769-8.269z"></path>
+            <path d="M26.588 8.752c-1.025-1.138-2.538-1.569-3.925-1.269-0.569 0.119-0.931 0.688-0.813 1.256 0.125 0.569 0.688 0.931 1.25 0.806v0c0.681-0.144 1.419 0.069 1.919 0.619 0.5 0.556 0.637 1.313 0.419 1.975v0c-0.175 0.55 0.125 1.15 0.681 1.331 0.556 0.175 1.15-0.125 1.331-0.681 0.438-1.356 0.163-2.906-0.863-4.037z"></path>
+            <path d="M13.738 20.771c-0.188 0.319-0.594 0.469-0.912 0.337-0.319-0.125-0.412-0.488-0.231-0.794 0.188-0.306 0.581-0.456 0.894-0.337 0.313 0.113 0.425 0.469 0.25 0.794zM12.044 22.933c-0.512 0.819-1.613 1.175-2.438 0.8-0.813-0.369-1.056-1.319-0.544-2.119 0.506-0.794 1.569-1.15 2.388-0.806 0.831 0.356 1.1 1.3 0.594 2.125zM13.969 17.146c-2.519-0.656-5.369 0.6-6.463 2.819-1.119 2.262-0.037 4.781 2.506 5.606 2.638 0.85 5.75-0.456 6.831-2.894 1.069-2.394-0.262-4.85-2.875-5.531z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="twitter">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32.003 6.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
+        </svg>
+    </span>
+    <span class="item__qr"></span>
+</div>        </div>
+        <div class="wrapper">
+            <section class="vditor-reset articles article__content">
+                <p><img src="https://img.hacpai.com/bing/20180201.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<h1 id="toc_h1_0">数据库表设计原则（多表字段尽量唯一）</h1>
+<p>目录</p>
+<ul>
+<li><a href="" target="_blank">零、总结</a></li>
+<li><a href="" target="_blank">一、多表字段尽量唯一</a></li>
+<li><a href="" target="_blank">二、数据库表结构设计方法及原则</a></li>
+</ul>
+<h3 id="toc_h3_1">零、总结</h3>
+<ol>
+<li>遵守的范式越多，出现更新等异常的几率就越小，同时 SQL 会越复杂（因为多表查询边多了）</li>
+<li>尽量遵守多的范式，这样错误越少，越节约改错时间，而且表的性能越好</li>
+<li>小 tip：表中字段加上表名的前一个字母做前缀，这样多表查询的时候方便超级多</li>
+<li>改错花掉的时间应该是远远远远超编写代码的时间，所以各种框架及结构要弄好，或者例如数据库的范式能多遵守就多遵守</li>
+<li>编写代码尽量完善，尽量减少错误</li>
+</ol>
+<h3 id="toc_h3_2">一、多表字段尽量唯一</h3>
+<p>比如 group 表，那么所有字段前面都加上一个 g（group 的第一个字母），比如 name 字段就变成 gname</p>
+<p>这样做在多个表 join 查询的时候会很方便，不然就是下面的效果</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">$data=db('group')-&gt;alias('g')-&gt;join('user u','u.id=g.tid')-&gt;field('u.picture as pic1,g.picture,username,g.name,g.id,g.slogan,g.description,g.time,g.tid,g.snumber')-&gt;where('tid',$id)-&gt;paginate(3);</pre>
+<p>还能少写很多代码</p>
+<p>还能避免很多错误，比如：</p>
+<h3 id="toc_h3_3">二、数据库表结构设计方法及原则</h3>
+<p>数据库设计的三大范式：为了建立冗余较小、结构合理的数据库，设计数据库时必须遵循一定的规则。在关系型数据库中这种规则就称为范式。范式是符合某一种设计要求的总结。要想设计一个结构合理的关系型数据库，必须满足一定的范式。</p>
+<p>　　在实际开发中最为常见的设计范式有三个：第一范式是最基本的范式。如果数据库表中的所有字段值都是不可分解的原子值，就说明该数据库表满足了第一范式；第二范式在第一范式的基础之上更进一层。第二范式需要确保数据库表中的每一列都和主键相关，而不能只与主键的某一部分相关（主要针对联合主键而言）。也就是说在一个数据库表中，一个表中只能保存一种数据，不可以把多种数据保存在同一张数据库表中；第三范式需要确保数据表中的每一列数据都和主键直接相关，而不能间接相关。总结一下，就是：<strong>第一范式(确保每列保持原子性)</strong>；<strong>第二范式(确保表中的每列都和主键相关)</strong>；<strong>第三范式(确保每列都和主键列直接相关，而不是间接相关)</strong>。</p>
+<p>　　在目前的企业信息系统中，数据库还是最佳的数据存储方式，虽然已经有很多的书籍在指导我们进行数据库设计，但应该那种方式是设计数据库的表结构的最好方法、设计时应遵从什么样的原则、四个范式如何能够用一种方式达到顺畅的应用等是我一直在思考和总结的问题，下文是我针对这几个问题根据自己的设计经历准备总结的一篇文章的提纲，欢迎大家一块进行探讨，集思广益。其中提到了领域建模的概念，但未作详细解释，希望以后能够有时间我们针对这个命题进行深入探讨。</p>
+<p>　　1.不应该针对整个系统进行数据库设计，而应该根据系统架构中的组件划分，针对每个组件所处理的业务进行组件单元的数据库设计；不同组件间所对应的数据库表之间的关联应尽可能减少，如果不同组件间的表需要外键关联也尽量不要创建外键关联，而只是记录关联表的一个主键，确保组件对应的表之间的独立性，为系统或表结构的重构提供可能性。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//注意他这里说的是"不要创建外键关联"，创建外键关联的语句是：
+//foreign key(member_id) references member (id);
+//我们几乎没有用到这条语句，因为我们就是这样做的，用到外键时，只是记录关联表的主键，而非在数据库级别上创建外键。
+//也不知道是歪打正着，还是前辈 DBA 过于强大，已经考虑好了。</pre>
+<p>　　2.采用领域模型驱动的方式和自顶向下的思路进行数据库设计，首先分析系统业务，根据职责定义对象。对象要符合封装的特性，确保与职责相关的数据项被定义在一个对象之内，这些数据项能够完整描述该职责，不会出现职责描述缺失。并且一个对象有且只有一项职责，如果一个对象要负责两个或两个以上的职责，应进行分拆。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">// 领域模型驱动的方式，目前用的还不是很熟，考虑的不够多。因为经常的数据库中的表只是拿来做存储用而已，
+//特别是小需求，要加什么字段，找到相关表加上去就行了，不太考虑领域模型。这个在中文站老业务表里很常见</pre>
+<p>　　3.根据建立的领域模型进行数据库表的映射，此时应参考数据库设计第二范式：一个表中的所有非关键字属性都依赖于整个关键字。关键字可以是一个属性，也可以是多个属性的集合，不论那种方式，都应确保关键字能够保证唯一性。在确定关键字时，应保证关键字不会参与业务且不会出现更新异常，这时，最优解决方案为采用一个自增数值型属性或一个随机字符串作为表的关键字。</p>
+<p>　　4.由于第一点所述的领域模型驱动的方式设计数据库表结构，领域模型中的每一个对象只有一项职责，所以对象中的数据项不存在传递依赖，所以，这种思路的数据库表结构设计从一开始即满足第三范式：一个表应满足第二范式，且属性间不存在传递依赖。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//数据库三范式记不得的同学去查资料温习一下。
+//个人认为<span style="margin: 0px; padding: 0px; font-family: " courier new" !important; font-size: 12px line-height: 1.5; background-color: rgb(255, 255, 0);">第三范式的目的是尽量减少数据冗余，保证相同的数据只存在一份。</span>
+//第三范式其实我们遵守的并不是很严格，特别是老的数据库表中会有冗余字段。这个要看情况决定吧。</pre>
+<p>　　5.同样，由于对象职责的单一性以及对象之间的关系反映的是业务逻辑之间的关系，所以在领域模型中的对象存在主对象和从对象之分，从对象是从 1－N 或 N－N 的角度进一步完善主对象的业务逻辑，所以从对象及对象关系映射为的表及表关联关系不存在删除和插入异常。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//最后一句看不懂，可能是"所以表及表关联关系不应该出现删除和插入异常。"？</pre>
+<p>　　6.在映射后得出的数据库表结构中，应再根据第四范式进行进一步修改，确保不存在多值依赖。这时，应根据反向工程的思路反馈给领域模型。如果表结构中存在多值依赖，则证明领域模型中的对象具有至少两个以上的职责，应根据第一条进行设计修正。第四范式：一个表如果满足 BCNF，不应存在多值依赖。　</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//第四范式我们遵守的并不多吧。
+//例如：
+//VAS_WP_CONFIG.config_name字段的值包括：adv（广告主题）/glare（炫彩滚动主题）/theme_simple（普通主题）/theme_cartoon（动画主题）/ theme_none（不显示背景主题）
+//cate_background（类目背景）/video（公司视频）/board_cartoon（动画招牌）/board_simple（普通招牌）等。
+//如果遵守第四范式，则需要新增一张VAS_WP_CONFIG_NAME表，存储配置名称枚举值，而VAS_WP_CONFIG.config_name字段改为VAS_WP_CONFIG.config_name_id。
+//这样做更利于扩展，不会因为每个人的理解不一致而向VAS_WP_CONFIG.config_name字段里设置乱七八糟的值，但是这样需要维护更多的小表，造成数据值表的数量膨胀，DBA可能会觉得管理上有更多的困难。
+//我们采用潜规则约定、java枚举类等其它方式来进行保证。但有时候效果并不是很好，经常发现旧数据库表中枚举字段的值五花八门，不全是约定的。</pre>
+<p>　　7.在经过分析后确认所有的表都满足二、三、四范式的情况下，表和表之间的关联尽量采用弱关联以便于对表字段和表结构的调整和重构。并且，我认为数据库中的表是用来持久化一个对象实例在特定时间及特定条件下的状态的，只是一个存储介质，所以，表和表之间也不应用强关联来表述业务（数据间的一致性），这一职责应由系统的逻辑层来保证，这种方式也确保了系统对于不正确数据（脏数据）的兼容性。当然，从整个系统的角度来说我们还是要尽最大努力确保系统不会产生脏数据，单从另一个角度来说，脏数据的产生在一定程度上也是不可避免的，我们也要保证系统对这种情况的容错性。这是一个折中的方案。</p>
+<p>　　8.应针对所有表的主键和外键建立索引，有针对性的（针对一些大数据量和常用检索方式）建立组合属性的索引，提高检索效率。虽然建立索引会消耗部分系统资源，但比较起在检索时搜索整张表中的数据尤其时表中的数据量较大时所带来的性能影响，以及无索引时的排序操作所带来的性能影响，这种方式仍然是值得提倡的。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//索引目前都是DBA根据具体的SQL来创建的，不过开发写SQL时，也应该适当考虑一下字段的索引。</pre>
+<p>　　9.尽量少采用存储过程，目前已经有很多技术可以替代存储过程的功能如"对象/关系映射"等，将数据一致性的保证放在数据库中，无论对于版本控制、开发和部署、以及数据库的迁移都会带来很大的影响。但不可否认，存储过程具有性能上的优势，所以，当系统可使用的硬件不会得到提升而性能又是非常重要的质量属性时，可经过平衡考虑选用存储过程。</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//目前都是杜绝使用存储过程的，我觉得用起来比较方便，对于我们来说，主要原因是会给DBA带来管理方面的麻烦，
+//因为时间一长，存储过程的逻辑和使用场景，往往没人能了解，容易产生更多问题</pre>
+<p>　　10.当处理表间的关联约束所付出的代价（常常是使用性上的代价）超过了保证不会出现修改、删除、更改异常所付出的代价，并且数据冗余也不是主要的问题时，表设计可以不符合四个范式。四个范式确保了不会出现异常，但也可能由此导致过于纯洁的设计，使得表结构难于使用，所以在设计时需要进行综合判断，但首先确保符合四个范式，然后再进行精化修正是刚刚进入数据库设计领域时可以采用的最好办法。</p>
+<p>　　11.设计出的表要具有较好的使用性，主要体现在查询时是否需要关联多张表且还需使用复杂的 SQL 技巧。我感觉遵守的范式越多，就越使 SQL 复杂，具体情况具体分析。设计出的表要尽可能减少数据冗余，确保数据的准确性，有效的控制冗余有助于提高数据库的性能</p>
+<p>　　因此，考虑了以上条件之后，表设计约定规则如下：</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">//规则1:表必须要有主键。
+//规则2:一个字段只表示一个含义。
+//规则3:总是包含两个日期字段:gmt_create(创建日期),gmt_modified(修改日期)，且这两个字段不应该包含有额外的业务逻辑。
+//规则4:MySQL中，gmt_create、gmt_modified使用DATETIME类型。
+//规则5:禁止使用复杂数据类型（数组，自定义类型等）。
+//规则6: MySQL中，附属表拆分后，附属表id与主表id保持一致。不允许在附属表新增主键字段。
+//规则7: MySQL中，存在过期概念的表，在其设计之初就必须有过期机制，且有明确的过期时间。过期数据必须迁移至历史表中。
+//规则8: MySQL中，不再使用的表，必须通知DBA予以更名归档。
+//规则9: MySQL中，线上表中若有不再使用的字段，为保证数据完整，禁止删除。
+//规则10: MySQL中，禁止使用OCI驱动，全部使用THI驱动。</pre>//  1.    alter table mytable engine=falcon;  操作费时，可能会占用服务器的所有i/o处理能力。
+//  2.    create table innodb_table like myisam_table;
+//        alter table innodb_table engine=innodb;
+//        insert into innodb_table select * from myisam_table;
+<p>二、数据类型</p>
+<p>　　1.尽可能的要把 field 定义为 Not NULL， MySQL 比较难优化使用了可空列的查询，它会使索引，索引统计更加复杂。可空列需要更多的存储空间，还需要 MySQL 内部进行特殊处理，当可空列被索引时，每条记录都需要一个格外的字节。 即使要在表中存储"没有值"的字段，考虑使用 0，特殊字段或者空字符串来代替。</p>
+<p>　　2.datetime 与 timestamp 能保存同样的数据：精确度为秒，但是 timestamp 使用的空间只有 datetime 的一半，还能保存时区，拥有特殊的自动更新能力。但是 timestamp 保存的时间范围要比 datetime 要小得多。MySQL 能存储的最细的时间粒度为秒</p>
+<p>　　3.mysql 支持很多种别名，如 bool,integer,nummeric.</p>
+<p>　　4.float 与 double 类型支持使用标准的浮点运算进行近似计算。 Decimal 类型保存精确的小数，在 &gt;=mysql5.0，MySQL 服务器自身进行了 decimal 的运算，因为 CPU 不支持直接对它进行运算，所以慢一点。</p>
+<p>　　5.mysql 会把 text 与 blob 类型的列当成有实体的对象来进行保存。他们有各自的数据类型家族(tinytext,smalltext,text,mediumtext,longtext; blob 类似)； MySQL 对 blob 与 text 列排序方式和其他类型有所不同，它不会按照字符串的完整长度来排序。而只是按照 max_sort_length 规定的若干个字节来进行排序。</p>
+<p>　　6.采用 enum 来代替字符串类型。MySQL 在内部把每个枚举值都保存为整数。enum 在内部是按照数字进行排序的，而不是按照字符串。enum 最不好的就是字符串列表是固定的，添加和删除必须使用 alter table。</p>
+<p>　　7.ip 地址，一般会采用 varchar(15)列来保存。事实上，IP 地址是个无符号的 32 位整数，而不是字符串。MySQL 提供了 inet_aton()和 inet_nota()函数在证书与 ip 地址之间进行转换。</p>
+<p>三、索引</p>
+<p>　　1.聚集索引不仅仅是一种单独的索引类型，而且是一种存储数据的方式。Innodb 引擎的聚集索引实际上在同样的结构中保存了 B-Tree 索引和数据行。当表有聚集索引时，它的数据行实际上保存在索引的叶子上。注意是存储引擎来实现索引。</p>
+<p>　　2.myisam 与 innodb 数据布局：myisam 索引树（无论是主键索引还是非主键索引）叶子节点都是指向的数据行，而 innodb 中聚集索引，主键索引树叶子节点就带得有数据的内容，而非主键索引树中叶子节点指向主键值，而不是数据的位置。</p>
+<p>　　3.mysql 有两种产生排序结果的方式：使用文件排序，或者扫描有序的索引。目前只有 myisam 支持全文索引。</p>
+<p>　　4.myisam 表有表级锁；myisam 表不支持事务，实际上，myisam 并不保证单条命令完成；myisam 只缓存了 MySQL 进程内部的索引，并保存在键缓存区内。OS 缓存了表的数据；行被紧密的保存在一起，磁盘上的数据有很小的磁盘占用和快速的全表扫描。</p>
+<p>　　5.innodb 支持事务和四种事务隔离级别；在 mysql5.0 中，只有 innodb 支持外鍵；支持行级锁与 mvcc；所有的 innodb 表都是按照主键聚集的；所有索引（出开主键）都是按主键引用行；索引没有使用前缀压缩，因此索引可能比 myisam 大很多；数据转载缓慢；阻塞 auto_increment，也就是用表级锁来产生每个 auto_increment。</p>
+<p>四、MySQL 性能分析</p>
+<p>　　1.mysql 提供了一个 benchmark(int 循环次数，char* 表达式)； 可以分析表达式执行所花时间。 例如：</p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">// select BENCHMARK(10000,SHA1('aaaaaaaaaaaaaaaa'))</pre>
+<p>　　2.mysql 有两种查询日志：普通日志和慢速日志。</p>
+<p>五、MySQL 高级特性</p>
+<p>　　1.在 MySQL 中，只有 myisam 存储引擎支持全文索引。myisam 全文索引是一种特殊的具有两层结构的 B 树。</p>
+<p>　　2.存储引擎事务在存储引擎内部被赋予 acid 属性，分布式（XA）是一种高层次事务，它可以历哟内部个两段提交的方式将 acid 属性扩展到存储引擎外部，甚至数据库外部。阶段 1：通知所有提交者准备提交 阶段 2：通知所有参与者进行真正提交。</p>
+<p>　　3.mysql 的字符集和校对规则有 4 个级别的默认设置：服务器级、数据库级、表级和字段级。Mysql4.1 开始支持 SQL 的子查询。</p>
+<p><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></p>
+<pre style="margin: 15px 0px; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 10px !important; white-space: pre-wrap; overflow-wrap: break-word; border-left: 4px ridge rgb(0, 255, 153) !important; border-top: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238); border-bottom: 1px solid rgb(238, 238, 238); border-image: initial; font-family: " courier new" !important; font-size: 12px !important;">/******************************************/
+/*   数据库全名 = degopen@10.218.249.92:3318【mysql】   */
+/*    表名称 = task_new   */
+/******************************************/
+CREATE TABLE `task_new` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `task_name` varchar(128) NOT NULL COMMENT '任务名称',
+  `image` varchar(128) DEFAULT NULL COMMENT '任务图标',
+  `description` varchar(1024) NOT NULL COMMENT '任务描述',
+  `content` varchar(1024) NOT NULL COMMENT '任务内容',
+  `finished_message` varchar(128) DEFAULT NULL COMMENT '任务完成提示信息',
+  `task_scope` int(11) NOT NULL COMMENT '任务范围, 0-平台任务, 1-游戏任务',
+  `series_task` int(11) NOT NULL DEFAULT '0' COMMENT '任务类型: 系列任务，单独任务',
+  `task_type` int(11) NOT NULL DEFAULT '0' COMMENT '任务类型: 固定任务, 推广任务, 日常任务',
+  `pre_task` varchar(128) DEFAULT NULL COMMENT '前置任务',
+  `post_task` varchar(128) DEFAULT NULL COMMENT '后置任务',
+  `task_status` int(11) NOT NULL COMMENT '任务状态, 待审核、未开始、生效中、已暂停、已完成、审核未通过',
+  `auto_task` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否手动任务, 0-否, 1-是',
+  `is_required` tinyint(4) NOT NULL COMMENT '是否必须任务',
+  `event_type` varchar(64) DEFAULT NULL COMMENT '关心的事件类型',
+  `task_target` bigint(20) DEFAULT '0' COMMENT '任务目标',
+  `reset_num` int(11) NOT NULL COMMENT '重置次数',
+  `reset_cycle` int(11) NOT NULL COMMENT '重置周期',
+  `task_interval` int(11) NOT NULL COMMENT '任务间隔',
+  `xiaoer` bigint(20) unsigned NOT NULL COMMENT '创建人',
+  `review_id` bigint(20) unsigned NOT NULL COMMENT '审核人ID',
+  `last_start_time` datetime DEFAULT NULL COMMENT '上次生效时间',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `start_time` datetime NOT NULL COMMENT '开始时间',
+  `end_time` datetime NOT NULL COMMENT '结束时间',
+  `start_condition` varchar(1024) NOT NULL COMMENT '任务触发条件',
+  `end_condition` varchar(1024) NOT NULL COMMENT '任务完成条件',
+  `enable` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `rule` varchar(4096) NOT NULL COMMENT '任务规则',
+  `priority` int(11) NOT NULL DEFAULT '1' COMMENT '任务优先级',
+  `progress_rule` varchar(2048) NOT NULL DEFAULT '' COMMENT '进度计算规则',
+  `order_no` int(11) DEFAULT '1' COMMENT '排序号',
+  `classification` int(11) DEFAULT '0' COMMENT '0：默认分类\n1：玩游戏\n2：抽奖',
+  `level` int(11) DEFAULT '0' COMMENT '针对同一个分类，不同的等级',
+  `ext1` longtext COMMENT '扩展字段1(UU中使用该字段指示按钮跳转)',
+  `ext2` longtext COMMENT '扩展字段2,暂时预留',
+  `channel` int(11) DEFAULT '0' COMMENT '任务渠道：0-uu或者1-game_box',
+  `consecutive_day` int(11) DEFAULT '1' COMMENT '连续完成任务的天数',
+  `activity` varchar(256) DEFAULT 'default' COMMENT '任务所属的活动名字',
+  `device` text COMMENT '机型',
+  `packages` text COMMENT '应用',
+  PRIMARY KEY (`id`),
+  KEY `name_channel` (`task_name`,`channel`),
+  KEY `activity` (`activity`(255))
+) ENGINE=InnoDB AUTO_INCREMENT=1194 DEFAULT CHARSET=utf8 COMMENT='任务表';</pre>
+                    <div>
+                        <hr>
+
+标题：数据库表设计原则<br>
+作者：<a href="www.alexli.com.cn" target="_blank">alex18595752445</a><br>
+地址：<a href="www.alexli.com.cn" target="_blank">https://github.com/articles/2020/02/26/1582697822439.html</a><br>
+
+<!-- 签名档内可使用 HTML、JavaScript -->
+<br>
+                    </div>
+            </section>
+        </div>
+
+    </div>
+        <div class="post__toc">
+<ul class="article__toc">
+        <li class="toc__h1">
+            <a href="#toc_h1_0">数据库表设计原则（多表字段尽量唯一）</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_1">零、总结</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_2">一、多表字段尽量唯一</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_3">二、数据库表结构设计方法及原则</a>
+        </li>
+</ul>        </div>
+        <div id="b3logsolocomments"></div>
+        <div class="wrapper">
+            <div id="vcomment"
+                 style="    margin-bottom: 40px; margin-top: 80px;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 5px;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 20px;"
+                 data-name="alex18595752445" data-postId="1582697822439"></div>
+        </div>
+    <div class="article__bottom">
+        <div class="wrapper">
+            <div class="fn__flex">
+                <div class="item" id="randomArticles"></div>
+                <div class="item" id="relevantArticles"></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/TweenMax.min.js?1583580097307"
+        charset="utf-8"></script>
+<footer class="footer">
+    <div class="wrapper">
+            <a href="https://hacpai.com/member/alex18595752445"
+       title="https://hacpai.com/member/alex18595752445"
+       class="user__site"
+       target="_blank" rel="noopener nofollow">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path fill="#d23f31" style="fill: var(--color1, #d23f31)" d="M5.787 17.226h17.033l5.954 9.528c0.47 0.752 0.003 1.361-1.042 1.361h-15.141z"></path>
+            <path d="M10.74 3.927h17.033c1.045 0 1.512 0.609 1.042 1.361l-5.954 9.528h-19.872l6.379-10.209c0.235-0.376 0.849-0.681 1.372-0.681z"></path>
+            <path d="M2.953 17.226h2.839l6.804 10.889h-1.892c-0.523 0-1.137-0.305-1.372-0.681z"></path>
+        </svg>
+    </a>
+
+        <a href="https://github.com/alexhaoxuan"
+           title="https://github.com/alexhaoxuan"
+           class="user__site"
+           target="_blank" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M16 0.331c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"></path>
+            </svg>
+        </a>
+
+        <a href="tencent://message/?uin=948928501"
+           title="948928501"
+           target="_blank"
+           class="user__site" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M4.821 14.393c-0.125-0.304-0.143-0.607-0.143-0.929 0-0.5 0.321-1.304 0.625-1.679-0.018-0.464 0.179-1.411 0.536-1.714 0-3.304 2.554-7.464 5.536-8.893 1.839-0.875 3.768-1.179 5.786-1.179 1.571 0 3.286 0.375 4.75 0.982 4.196 1.768 5.143 5.054 6.036 9.25l0.018 0.089c0.518 0.786 0.982 1.714 0.982 2.679 0 0.482-0.321 0.964-0.321 1.393 0 0.036 0.107 0.179 0.125 0.214 1.536 2.268 2.929 4.732 2.929 7.554 0 0.625-0.339 2.804-1.339 2.804-0.696 0-1.464-1.696-1.714-2.161-0.018-0.018-0.036-0.018-0.054-0.018l-0.089 0.071c-0.571 1.482-1.196 2.875-2.357 3.982 1.018 0.982 2.661 0.893 2.964 2.589-0.089 0.196-0.054 0.411-0.196 0.607-1.018 1.536-3.75 1.732-5.393 1.732-2.179 0-3.946-0.571-6-1.179-0.429-0.125-1.071-0.054-1.536-0.107-1.089 1.196-3.75 1.518-5.286 1.518-1.357 0-6.607-0.089-6.607-2.411 0-1 0.214-1.286 0.911-1.929 0.554-0.107 0.964-0.411 1.607-0.446 0.089 0 0.161-0.018 0.25-0.036 0.018-0.018 0.036-0.018 0.036-0.071l-0.036-0.054c-1.232-0.286-2.964-3.393-3.232-4.679l-0.089-0.054c-0.125 0-0.179 0.268-0.214 0.357-0.393 0.911-1.321 1.893-2.357 2h-0.018c-0.143 0-0.089-0.143-0.196-0.179-0.25-0.589-0.411-1.125-0.411-1.786 0-3.571 1.714-6.214 4.5-8.321z"></path>
+            </svg>
+        </a>
+        <a href="javascript:void(0)"
+           class="user__site" title="wan948928501">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+            </svg>
+        </a>
+ <br>
+        &copy; 2020
+        <a href="https://github.com">奶瓶</a>
+        豫ICP备20003042号
+        <span class="footer__heart">❤️</span>
+        Powered by <a href="https://solo.b3log.org" target="_blank">Solo</a>
+        <br>
+        Theme Bubble
+        <sup>[<a href="https://www.cnblogs.com/jajian" target="_blank">ref</a>]</sup>
+        by <a href="http://vanessa.b3log.org" target="_blank">Vanessa</a> <br>
+    </div>
+</footer>
+<svg class="side__top" id="sideTop" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <path d="M26.562 13.958c0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303v0c0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303v0zM23.305 10.7c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM20.022 7.417c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM29.67 0h-27.339c-0.677 0-1.228 0.551-1.228 1.228s0.551 1.228 1.228 1.228h11.151l-10.725 10.725c-0.476 0.476-0.476 1.253 0 1.729 0.226 0.226 0.551 0.351 0.852 0.351s0.626-0.125 0.852-0.351l10.074-10.074v25.936c0 0.677 0.551 1.228 1.228 1.228s1.228-0.551 1.228-1.228v-26.011c0.476 0.426 1.203 0.426 1.679-0.050s0.476-1.253 0-1.729l-0.576-0.576h11.577c0.677 0 1.228-0.551 1.228-1.228 0-0.626-0.551-1.178-1.228-1.178z"></path>
+</svg>
+<script>
+  var Label = {
+    servePath: "https://github.com",
+    staticServePath: "https://github.com",
+    luteAvailable: false,
+    hljsStyle: 'github',
+    langLabel: "zh_CN",
+    version: "3.9.0",
+    staticSite: true,
+    showCodeBlockLn: true,
+  }
+</script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/common.min.js?1583580097307"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/circleMagic.min.js?1583580097307"
+        charset="utf-8"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.css"/>
+<script async src="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.js"></script>
+<div class="solo-kanbanniang">
+    <div class="solo-kanbanniang__tip"></div>
+    <canvas id="soloKanbanniang" width="280" height="250"></canvas>
+    <div class="solo-kanbanniang__tool">
+        <svg id="soloKanbanniangHome" viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32 18.967l-16-12.42-16 12.42v-5.064l16-12.42 16 12.42zM28 18.516v12h-8v-8h-8v8h-8v-12l12-9z"></path>
+        </svg>
+        <svg id="soloKanbanniangRSS" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M320.364 768q0 45.728-32 77.728t-77.728 32-77.728-32-32-77.728 32-77.728 77.728-32 77.728 32 32 77.728zM612.94 838.272q1.152 16-9.728 27.424-10.272 12-26.848 12h-77.152q-14.272 0-24.576-9.44t-11.424-23.712q-12.576-130.848-105.44-223.712t-223.712-105.44q-14.272-1.152-23.712-11.424t-9.44-24.576V402.24q0-16.576 12-26.848 9.728-9.728 24.576-9.728h2.848q91.424 7.424 174.848 46.016t148 103.712q65.152 64.576 103.712 148t46.016 174.848z m292.576 1.152q1.152 15.424-10.272 26.848-10.272 11.424-26.272 11.424h-81.728q-14.848 0-25.44-10.016t-11.136-24.288q-6.848-122.848-57.728-233.44t-132.288-192-192-132.288-233.44-58.272q-14.272-0.576-24.288-11.136t-10.016-24.864V109.664q0-16 11.424-26.272 10.272-10.272 25.152-10.272h1.728q149.728 7.424 286.56 68.576t243.136 168q106.848 106.272 168 243.136t68.576 286.56z"></path>
+        </svg>
+        <svg id="soloKanbanniangChat" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M802.42709 96.163153H219.476155c-84.48109 0-154.896836 71.746044-154.896836 157.840888v393.119449c0 86.072331 70.415746 157.819398 154.896836 157.819399h214.038818V925.470963s22.526039 40.168862 64.767096 5.734608c30.965246-25.819039 126.721123-91.828428 171.775248-123.385145h132.369773c84.502579 0 154.896836-83.21526 154.896836-157.839865V251.125481c0-86.094844-70.394257-154.962328-154.896836-154.962328zM301.144176 518.002714c-39.427988 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044 39.426965 0 70.393233 31.577183 70.393234 71.746044 0 40.169885-30.966269 71.746044-70.393234 71.746044z m208.411657 0c-39.450501 0-70.415746-31.576159-70.415746-71.746044 0-40.168862 30.965246-71.746044 70.415746-71.746044 39.405475 0 70.394257 31.577183 70.394257 71.746044 0 40.169885-30.988782 71.746044-70.394257 71.746044z m211.203236 0c-39.426965 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044s70.415746 31.577183 70.415746 71.746044c-0.001023 40.169885-30.988782 71.746044-70.415746 71.746044z"></path>
+        </svg>
+        <svg id="soloKanbanniangChange" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M936.672 193.216l-226.88-64c-8.704-2.528-18.112-1.12-25.824 3.776-7.68 4.864-12.896 12.736-14.432 21.728C655.712 236.928 595.328 288 512 288c-71.424 0-142.464-103.296-163.776-143.104-7.136-13.28-22.528-19.84-37.024-15.68l-224 64C73.472 197.152 64 209.728 64 224v256a31.93 31.93 0 0 0 11.712 24.736c7.392 6.08 17.152 8.512 26.56 6.624L224 487.04V832c0 52.928 43.072 96 96 96h384c52.928 0 96-43.072 96-96V519.04l121.728 24.352c9.44 1.92 19.2-0.544 26.56-6.624C955.68 530.656 960 521.6 960 512V224c0-14.336-9.536-26.912-23.328-30.784zM672 800H352c-17.664 0-32-14.304-32-32s14.336-32 32-32h320c17.696 0 32 14.304 32 32s-14.304 32-32 32z"></path>
+        </svg>
+        <svg id="soloKanbanniangPhoto" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M898.048 258.048q23.552-1.024 46.592 9.216t40.96 27.136 28.672 39.424 10.752 46.08l0 390.144q0 24.576-10.752 47.104t-28.672 40.448-40.96 28.16-47.616 10.24l-697.344 0q-24.576 0-48.64-10.24t-42.496-27.648-29.696-40.448-11.264-48.64l0-381.952q0-22.528 10.752-45.568t28.672-41.472 39.936-30.208 44.544-11.776l63.488 0 13.312-83.968q3.072-20.48 18.432-32.768t34.816-12.288l456.704 0q19.456 0 34.304 10.752t16.896 34.304l14.336 83.968 54.272 0zM548.864 712.704q40.96 0 77.824-15.872t63.488-42.496 42.496-62.976 15.872-77.312-15.872-77.312-42.496-62.976-63.488-42.496-77.824-15.872-77.312 15.872-63.488 42.496-43.008 62.976-15.872 77.312 15.872 77.312 43.008 62.976 63.488 42.496 77.312 15.872z"></path>
+        </svg>
+        <svg id="soloKanbanniangGithub" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M1024 524.8c0 114.346667-32.554667 217.216-97.706667 308.565333-65.066667 91.306667-149.162667 154.538667-252.288 189.610667-11.989333 2.304-20.778667 0.682667-26.325333-4.778667a27.605333 27.605333 0 0 1-8.362667-20.48v-144.213333c0-44.16-11.52-76.501333-34.645333-97.024 25.344-2.730667 48.085333-6.826667 68.309333-12.288a268.629333 268.629333 0 0 0 62.72-26.666667 187.434667 187.434667 0 0 0 53.973334-45.44c14.421333-18.005333 26.197333-41.898667 35.328-71.765333 9.088-29.824 13.653333-64.128 13.653333-102.826667 0-55.125333-17.536-102.058667-52.650667-140.8 16.426667-41.429333 14.677333-87.893333-5.333333-139.392-12.458667-4.096-30.464-1.578667-54.016 7.509334a355.328 355.328 0 0 0-61.312 30.08L640 271.274667a462.336 462.336 0 0 0-128-17.749334c-43.989333 0-86.656 5.930667-128 17.749334a589.824 589.824 0 0 0-28.330667-18.432c-11.776-7.253333-30.336-16.042667-55.68-26.325334-25.344-10.24-44.416-13.312-57.301333-9.216-19.584 51.498667-21.12 97.962667-4.693333 139.434667-35.114667 38.698667-52.650667 85.632-52.650667 140.757333 0 38.698667 4.565333 72.874667 13.653333 102.485334 9.130667 29.610667 20.778667 53.546667 34.986667 71.765333 14.250667 18.218667 32.128 33.493333 53.674667 45.781333 21.546667 12.288 42.453333 21.205333 62.677333 26.666667 20.224 5.461333 43.008 9.557333 68.309333 12.288-17.749333 16.384-28.629333 39.850667-32.64 70.4a130.005333 130.005333 0 0 1-29.994666 10.24c-10.666667 2.261333-23.338667 3.413333-37.973334 3.413333-14.72 0-29.269333-4.906667-43.690666-14.677333-14.464-9.813333-26.794667-24.064-36.992-42.709333a109.226667 109.226667 0 0 0-32.341334-35.541334c-13.141333-9.130667-24.106667-14.592-33.024-16.426666l-13.312-2.048c-9.344 0-15.786667 1.024-19.328 3.072-3.584 2.090667-4.693333 4.693333-3.328 7.893333 1.28 3.157333 3.328 6.4 5.973334 9.557333 2.688 3.2 5.546667 5.930667 8.661333 8.192l4.693333 3.413334c9.770667 4.565333 19.413333 13.226667 29.013334 25.984 9.514667 12.757333 16.512 24.362667 20.992 34.858666l6.656 15.701334c5.76 17.322667 15.530667 31.317333 29.312 42.026666 13.781333 10.666667 28.672 17.536 44.672 20.48 16 2.986667 31.445333 4.565333 46.336 4.821334 14.890667 0.213333 27.221333-0.597333 36.992-2.389334l15.36-2.730666c0 17.28 0.085333 37.546667 0.298666 60.8l0.341334 36.906666a27.050667 27.050667 0 0 1-8.661334 20.48c-5.76 5.461333-14.677333 7.082667-26.666666 4.778667-103.125333-35.072-187.221333-98.261333-252.330667-189.610667C32.554667 742.058667 0 639.146667 0 524.8c0-95.232 22.869333-183.04 68.693333-263.466667A516.266667 516.266667 0 0 1 254.976 70.4C333.44 23.466667 419.114667 0 512 0c92.885333 0 178.56 23.466667 256.981333 70.4a516.266667 516.266667 0 0 1 186.368 190.976C1001.130667 341.802667 1024 429.653333 1024 524.842667z"></path>
+        </svg>
+        <svg id="soloKanbanniangClose" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M517.572566143763 1018.6748601482986C238.26554897656422 1018.6748601482986 11.897910175114305 792.2714997690043 11.897910175114305 513.0002041796496c0-279.3070171671984 226.36763880144977-505.71037754649296 505.6746559686481-505.71037754649296 279.2712955893538 0 505.6746559686481 226.40336037929444 505.6746559686481 505.71037754649296C1023.2472221124112 792.2714997690043 796.8795833109612 1018.6748601482986 517.572566143763 1018.6748601482986zM754.7281214542927 339.25044954334646c13.752807470184345-13.752807470184345 9.680547595895998-40.186775075214015-9.073280772537204-58.94060344364717l-2.143294670678079-2.1075730928334457c-18.7538283684332-18.7538283684332-45.15207439561819-22.861809820566194-58.90488186580257-9.073280772537204l-168.21291007038468 168.24863164822932-180.42968969324974-180.46541127109438c-13.967136937252159-13.967136937252159-40.72259874288353-9.823433907274534-59.72647815622916 9.216167083915742l-2.143294670678079 2.143294670678079c-19.039600991190277 19.003879413345654-23.111860865478626 45.75934121897699-9.180445506071107 59.655035000539876l180.42968969324974 180.46541127109438-176.07165719620428 176.03593561835962c-13.788529048028984 13.824250625873615-9.716269173740633 40.151053497369375 9.073280772537204 58.94060344364717l2.1075730928334457 2.1075730928334457c18.7538283684332 18.7538283684332 45.15207439561819 22.897531398410823 58.90488186580257 9.073280772537204l176.10737877404887-176.10737877404887 170.39192631890742 170.42764789675192c13.967136937252159 13.931415359407513 40.686877165038865 9.85915548511917 59.690756578384516-9.180445506071107l2.1790162485227142-2.1790162485227142c19.039600991190277-18.968157835501014 23.147582443323273-45.72361964113239 9.180445506071107-59.690756578384516l-170.39192631890742-170.42764789675192L754.7281214542927 339.25044954334646z"></path>
+        </svg>
+    </div>
+</div>
+
+    <svg viewBox="0 0 32 32" width="100%" height="100%" class="side__top side__top--toc">
+        <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+    </svg>
+
+<script type="text/javascript">
+    Util.addScript('https://github.com/js/page.min.js?1583580097307', 'soloPageScript')
+    var page = new Page({
+        "commentContentCannotEmptyLabel": "评论内容只能为 2 到 500 个字符！",
+        "oId": "1582697822439",
+        "blogHost": "https://github.com",
+        "randomArticles1Label": "随机阅读：",
+        "externalRelevantArticles1Label": "站外相关阅读："
+    });
+    $(document).ready(function () {
+        page.load();
+    page.tips.externalRelevantArticlesDisplayCount = "0";
+    Skin.initArticle()
+    });
+</script>
+
+</body>
+</html>
+
+<!-- Generated by Latke (https://github.com/88250/latke) in 59ms, 2020/03/18 18:15:18 -->

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/><meta name="theme-color" content="#3b3e43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="format-detection" content="telephone=no"/><title>集合框架（一）集合基础知识 - 奶瓶</title><meta name="description" content="https://blog.csdn.net/wangwei_620/article/details/82049502"/><meta property="og:description" content="https://blog.csdn.net/wangwei_620/article/details/82049502"/>    <meta name="keywords" content="Solo,Java,博客,开源,服务器"/><link rel="dns-prefetch" href="https://github.com"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://github.com"><link rel="icon" type="image/png" href="https://static.b3log.org/images/brand/solo-32.png"/><link rel="apple-touch-icon" href="https://static.b3log.org/images/brand/solo-32.png"><link rel="shortcut icon" type="image/x-icon" href="https://static.b3log.org/images/brand/solo-32.png"><meta name="copyright" content="B3log"/><meta http-equiv="Window-target" content="_top"/><meta property="og:locale" content="zh_CN"/><meta property="og:title" content="集合框架（一）集合基础知识 - 奶瓶"/><meta property="og:site_name" content="奶瓶"/><meta property="og:url"      content="https://github.com/articles/2020/02/27/1582780977263.html?"/><meta property="og:image" content="https://static.b3log.org/images/brand/solo-32.png"/><link rel="search" type="application/opensearchdescription+xml" title="集合框架（一）集合基础知识 - 奶瓶" href="/opensearch.xml"><link href="https://github.com/rss.xml" title="RSS" type="application/rss+xml" rel="alternate"/><link rel="manifest" href="https://github.com/manifest.json">        <link rel="canonical" href="https://github.com/articles/2020/02/27/1582780977263.html">        <link rel="stylesheet"
+              href="https://github.com/skins/Bubble/css/base.css?1583580097307"/>
+            <link rel="prev" title="数据库表设计原则" href="https://github.com/articles/2020/02/26/1582697822439.html">
+            <link rel="next" title="Mardown 语法" href="https://github.com/articles/2020/02/28/1582854715653.html">
+    </head>
+<body class="fn__flex-column">
+<div id="pjax" class="fn__flex-1">
+    
+    <progress class="fn__progress"></progress>
+    <header class="header header--article">
+        <div class="wrapper header__title">
+            <h1 class="header__h1 fn__flex-inline">
+                <a href="https://github.com" rel="start">奶瓶</a>
+            </h1>
+            <h2 class="header__desc header__desc--title">不会是在踩坑就是在踩坑的路上</h2>
+            <div class="header__desc">
+                愿意用三辈子如烟火般美丽的生命去换取你一世的迷恋。
+            </div>
+            <svg class="header__down" id="headerDown" viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M15.992 25.304c-0 0-0 0-0.001 0-0.516 0-0.981-0.216-1.31-0.563l-0.001-0.001-14.187-14.996c-0.306-0.323-0.494-0.76-0.494-1.241 0-0.998 0.809-1.807 1.807-1.807 0.517 0 0.983 0.217 1.313 0.565l0.001 0.001 12.875 13.612 12.886-13.612c0.331-0.348 0.797-0.565 1.314-0.565 0.481 0 0.918 0.187 1.242 0.493l-0.001-0.001c0.723 0.687 0.755 1.832 0.072 2.555l-14.201 14.996c-0.33 0.348-0.795 0.564-1.311 0.564-0.001 0-0.003 0-0.004 0h0z"></path>
+            </svg>
+        </div>
+    </header>
+    <div class="side__menu">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+        </svg>
+        <span>
+            &nbsp; menu
+        </span>
+    </div>
+    <div class="side__main">
+        <div class="side__bg"></div>
+        <div class="side__panel">
+            <svg class="side__close ft__a" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 20 20">
+                <path d="M18.362 19.324c-0.902 0.902-2.363 0.902-3.263 0l-5.098-5.827-5.098 5.825c-0.902 0.902-2.363 0.902-3.263 0-0.902-0.902-0.902-2.363 0-3.263l5.304-6.057-5.306-6.061c-0.902-0.902-0.902-2.361 0-3.263s2.361-0.902 3.263 0l5.1 5.829 5.098-5.829c0.902-0.902 2.361-0.902 3.263 0s0.902 2.363 0 3.263l-5.304 6.061 5.304 6.057c0.902 0.902 0.902 2.363 0 3.265z"></path>
+            </svg>
+
+            <div class="side__header">
+                <a href="https://github.com" rel="start"><img class="side__logo" alt="奶瓶" src="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100"></a>
+
+                <div class="side__meta">
+                    16 文章 <br>
+                    <span data-uvstaturl="https://github.com">0</span> 浏览
+                    
+                </div>
+            </div>
+
+            <div class="side__title">
+                <span>ღゝ◡╹)ノ❤️</span>
+            </div>
+            <ul class="side__nav">
+                <li>
+                    <a href="https://github.com" rel="start">
+                            奶瓶
+                    </a>
+                </li>
+                    <li>
+                        <a href="/my-github-repos" target="_self"><img
+                                class="page-icon" src="/images/github-icon.png" alt="我的开源">我的开源</a>
+                    </li>
+                <li>
+                    <a href="https://github.com/categories.html">分类</a>
+                </li>
+                <li>
+                    <a href="https://github.com/tags.html">标签墙</a>
+                </li>
+                <li>
+                    <a href="https://github.com/archives.html">存档</a>
+                </li>
+                <li>
+                    <a href="https://github.com/links.html">友情链接</a>
+                </li>
+                <li>
+                    <a rel="alternate" href="https://github.com/rss.xml">RSS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="article__top" style="background-image: url(https://img.hacpai.com/bing/20180225.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)">
+        <div style="background-image: url(https://img.hacpai.com/bing/20180225.jpg?imageView2/1/w/960/h/540/interlace/1/q/100)"></div>
+        <canvas id="articleTop"></canvas>
+    </div>
+    <div class="article">
+        <div class="ft__center">
+            <div class="article__meta">
+                <time>
+                    2020-03-05
+                </time>
+                /
+                    <a rel="tag"
+                       href="https://github.com/tags/Java">Java</a> &nbsp;
+            </div>
+            <h2 class="article__title">
+                集合框架（一）集合基础知识
+                    <sup>
+                        置顶！
+                    </sup>
+            </h2>
+<div class="article__share"
+     data-title="集合框架（一）集合基础知识"
+     data-blogtitle="奶瓶"
+     data-url="https://github.com/articles/2020/02/27/1582780977263.html"
+     data-avatar="https://img.hacpai.com/avatar/1581783925261_1581785093943.jpeg?imageView2/1/w/128/h/128/interlace/0/q/100">
+    <span class="item" data-type="qqz">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M22.824 13.989l-8.348 6.287s3.351 0.522 8.404 0.461l-0.23-1.040 7.2-6.549c0.132-0.12 0.183-0.312 0.129-0.487s-0.203-0.299-0.377-0.314l-9.492-0.856-3.708-9.213c-0.068-0.169-0.226-0.279-0.401-0.279s-0.333 0.11-0.401 0.279l-3.708 9.213-9.492 0.856c-0.174 0.015-0.323 0.139-0.377 0.314s-0.004 0.366 0.129 0.487l7.2 6.549-2.158 9.742c-0.040 0.178 0.026 0.365 0.168 0.474 0.142 0.107 0.331 0.115 0.481 0.021l8.158-5.165 8.158 5.165c0.070 0.045 0.147 0.066 0.225 0.066 0.090 0 0.18-0.029 0.256-0.086 0.142-0.109 0.208-0.295 0.168-0.474l-1.707-7.704c0.732-0.386 1.538-1.040 1.538-1.040s-3.195 1.638-14.664 0.838l8.312-6.325s-0.327-0.534-10.744-0.914c-0.697-0.026 8.493-1.83 15.281-0.305z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="wechat">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="weibo">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M13.444 27.064c-5.3 0.525-9.875-1.875-10.219-5.35-0.344-3.481 3.675-6.719 8.969-7.244 5.3-0.525 9.875 1.875 10.212 5.35 0.35 3.481-3.669 6.725-8.963 7.244zM24.038 15.521c-0.45-0.137-0.762-0.225-0.525-0.819 0.512-1.287 0.563-2.394 0.006-3.188-1.038-1.481-3.881-1.406-7.137-0.037 0 0-1.025 0.444-0.762-0.363 0.5-1.613 0.425-2.956-0.356-3.737-1.769-1.769-6.469 0.069-10.5 4.1-3.013 3.006-4.763 6.212-4.763 8.981 0 5.287 6.787 8.506 13.425 8.506 8.7 0 14.494-5.056 14.494-9.069 0-2.431-2.044-3.806-3.881-4.375z"></path>
+            <path d="M29.819 5.833c-2.1-2.331-5.2-3.219-8.063-2.612v0c-0.663 0.144-1.081 0.794-0.938 1.45 0.144 0.662 0.788 1.081 1.45 0.938 2.038-0.431 4.238 0.2 5.731 1.856s1.9 3.913 1.256 5.888v0c-0.206 0.644 0.144 1.331 0.788 1.544 0.644 0.206 1.331-0.144 1.544-0.787v-0.006c0.9-2.762 0.331-5.938-1.769-8.269z"></path>
+            <path d="M26.588 8.752c-1.025-1.138-2.538-1.569-3.925-1.269-0.569 0.119-0.931 0.688-0.813 1.256 0.125 0.569 0.688 0.931 1.25 0.806v0c0.681-0.144 1.419 0.069 1.919 0.619 0.5 0.556 0.637 1.313 0.419 1.975v0c-0.175 0.55 0.125 1.15 0.681 1.331 0.556 0.175 1.15-0.125 1.331-0.681 0.438-1.356 0.163-2.906-0.863-4.037z"></path>
+            <path d="M13.738 20.771c-0.188 0.319-0.594 0.469-0.912 0.337-0.319-0.125-0.412-0.488-0.231-0.794 0.188-0.306 0.581-0.456 0.894-0.337 0.313 0.113 0.425 0.469 0.25 0.794zM12.044 22.933c-0.512 0.819-1.613 1.175-2.438 0.8-0.813-0.369-1.056-1.319-0.544-2.119 0.506-0.794 1.569-1.15 2.388-0.806 0.831 0.356 1.1 1.3 0.594 2.125zM13.969 17.146c-2.519-0.656-5.369 0.6-6.463 2.819-1.119 2.262-0.037 4.781 2.506 5.606 2.638 0.85 5.75-0.456 6.831-2.894 1.069-2.394-0.262-4.85-2.875-5.531z"></path>
+        </svg>
+    </span>
+    <span class="item" data-type="twitter">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32.003 6.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
+        </svg>
+    </span>
+    <span class="item__qr"></span>
+</div>        </div>
+        <div class="wrapper">
+            <section class="vditor-reset articles article__content">
+                <p><img src="https://img.hacpai.com/bing/20180225.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<h1 id="toc_h1_0">一、集合框架总体架构图分析</h1>
+<ol>
+<li>首先我们先来看看一个集合框架的总图，有一个清晰的脉络机构，非常重要，因为不管我们学习那知识点，思路很重要。下面这张张图是我从网上博客摘取的，在此谢谢你精心的绘制。说明一下颜色含义：黄色：代表接口 绿色：代表抽象接口  蓝色：代表实现类<br>
+<img src="https://img.hacpai.com/file/2020/02/image-2bc9ca81.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"><br>
+<img src="https://img.hacpai.com/file/2020/02/image-24ac337a.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="image.png"></li>
+</ol>
+<p>这是两个集合框架接口的总体图分为两个集合接口，分别是 Collection 接口，和 map 接口，collection 集合是单列集合，而 map 集合是双列集合，下面我们将详细的从简单的功能功能学习到它的底层实现原理的探索。</p>
+<h1 id="toc_h1_1">二、Collection 集合接口</h1>
+<ol>
+<li>首先说说集合与数组的区别</li>
+</ol>
+<p>数组的长度是固定的，如果想增加长度，只能创建新的数组。</p>
+<p>集合的长度是可变的，数据理论可以无限添加，自动扩容。</p>
+<p>数组元素的类型必须是同一种类型，比如 String[]  arr = ["aaa","bbb"];</p>
+<p>集合元素可以是不同的类型</p>
+<pre><code class="language-java">ArrayList&lt;Object&gt; arr = new ArrayList&lt;Object&gt;();
+</code></pre>
+<p>2.集合框架的出现</p>
+<p>是在 jdk1.1 时候只有一种集合 Vector《XX》</p>
+<p>后面在 1.5 的时候出现了集合框架</p>
+<ol>
+<li>官方解释</li>
+</ol>
+<ul>
+<li>集合层次结构中的根界面。 集合表示一组被称为其元素的对象。 一些集合允许重复元素，而其他集合不允许。 有些被命令和其他无序。 JDK 不提供此接口的任何直接实现：它提供了更具体的子接口的实现，如 Set 和 List 。 该界面通常用于传递集合，并在需要最大的通用性的情况下对其进行操作。</li>
+<li>包或多重集 （可能包含重复元素的无序集合）应直接实现此接口。</li>
+</ul>
+<ol>
+<li>Collection 的实现接口以及子实现类，功能以及特点</li>
+</ol>
+<p>集合的顶层接口：Collection《E》</p>
+<table>
+<thead>
+<tr><th align="center">接口名称</th><th>List</th><th>Set</th><th>Queue</th></tr>
+</thead>
+<tbody>
+<tr><td align="center">底层原理</td><td>无</td><td>无</td><td>无</td></tr>
+<tr><td align="center">特点</td><td>有下标，可重复</td><td>（除 LinlHashSet）无下标，不可重复</td><td>暂无</td></tr>
+</tbody>
+</table>
+<h2 id="toc_h2_2">List 子类对比</h2>
+<table>
+<thead>
+<tr><th>接口名称</th><th>底层实现</th><th>初始化大小</th><th>扩容机制</th><th>优点</th><th>缺点</th></tr>
+</thead>
+<tbody>
+<tr><td>ArrayList</td><td>数组</td><td>10</td><td>0.5</td><td>查询快，效率高</td><td>insert、del 慢，线程不安全（线程不同步）。</td></tr>
+<tr><td>LinkedList</td><td>双向<br>链表</td><td>无</td><td>无</td><td>查询快，insert、del 快，效率高</td><td>线程不安全（线程不同步）</td></tr>
+<tr><td>Vector</td><td>数组</td><td>10</td><td>1</td><td>查询快，线程安全</td><td>效率低，线程不安全（线程同步）。</td></tr>
+</tbody>
+</table>
+<h2 id="toc_h2_3">原因分析</h2>
+<p><img src="https://img.hacpai.com/file/2020/02/image-369d151b.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p><img src="https://img.hacpai.com/file/2020/02/image-4ab1ac3d.png?imageView2/2/w/1280/format/jpg/interlace/1/q/100" alt="" title="image.png"></p>
+<p>详解：</p>
+<p>一、同步性</p>
+<p>ArrayList,LinkedList 是不同步的，而 Vestor 是同步的。所以如果不要求线程安全的话，可以使用 ArrayList 或 LinkedList，可以节省为同步而耗费的开销。但在多线程的情况下，有时候就不得不使用 Vector 了。当然，也可以通过一些办法包装 ArrayList,LinkedList，使他们也达到同步，但效率可能会有所降低。</p>
+<p>二、数据增长<br>
+从内部实现机制来讲 ArrayList 和 Vector 都是使用 Objec 的数组形式来存储的。当你向这两种类型中增加元素的时候，如果元素的数目超出了内部数组目前的长度它们都需要扩展内部数组的长度，Vector 缺省情况下自动增长原来一倍的数组长度，ArrayList 是原来的 50%,所以最后你获得的这个集合所占的空间总是比你实际需要的要大。所以如果你要在集合中保存大量的数据那么使用 Vector 有一些优势，因为你可以通过设置集合的初始化大小来避免不必要的资源开销。</p>
+<p>三、检索、插入、删除对象的效率</p>
+<p>ArrayList 和 Vector 中，从指定的位置（用 index）检索一个对象，或在集合的末尾插入、删除一个对象的时间是一样的，可表示为 O(1)。但是，如果在集合的其他位置增加或移除元素那么花费的时间会呈线形增长：O(n-i)，其中 n 代表集合中元素的个数，i 代表元素增加或移除元素的索引位置。为什么会这样呢？以为在进行上述操作的时候集合中第 i 和第 i 个元素之后的所有元素都要执行(n-i)个对象的位移操作。<br>
+LinkedList 中，在插入、删除集合中任何位置的元素所花费的时间都是一样的—O(1)，但它在索引一个元素的时候比较慢，为 O(i),其中 i 是索引的位置。<br>
+————————————————————————————————————————<br>
+一般大家都知道 ArrayList 和 LinkedList 的大致区别：<br>
+1.ArrayList 是实现了基于动态数组的数据结构，LinkedList 基于链表的数据结构。<br>
+2.对于随机访问 get 和 set，ArrayList 觉得优于 LinkedList，因为 LinkedList 要移动指针。<br>
+3.对于新增和删除操作 add 和 remove，LinedList 比较占优势，因为 ArrayList 要移动数据。</p>
+<h3 id="toc_h3_4">总结：</h3>
+<p>1．对 ArrayList 和 LinkedList 而言，在列表末尾增加一个元素所花的开销都是固定的。对 ArrayList 而言，主要是在内部数组中增加一项，指向所添加的元素，偶尔可能会导致对数组重新进行分配；而对 LinkedList 而言，这个开销是 统一的，分配一个内部 Entry 对象。</p>
+<p>2．在 ArrayList 的 中间插入或删除一个元素意味着这个列表中剩余的元素都会被移动；而在 LinkedList 的中间插入或删除一个元素的开销是固定的。</p>
+<p>3．LinkedList 不 支持高效的随机元素访问。</p>
+<p>4．ArrayList 的空 间浪费主要体现在在 list 列表的结尾预留一定的容量空间，而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗相当的空间</p>
+<h2 id="toc_h2_5">Map</h2>
+<ul>
+<li><code>Collection</code> 中的集合，元素是孤立存在的（理解为单身），向集合中存储元素采用一个个元素的方式存储。</li>
+<li><code>Map</code> 中的集合，元素是成对存在的(理解为夫妻)。每个元素由键与值两部分组成，通过键(K)可以找对所对应的值(V)。</li>
+<li><code>Collection</code> 中的集合称为单列集合，<code>Map</code> 中的集合称为双列集合。</li>
+</ul>
+<table>
+<thead>
+<tr><th>接口名称</th><th>存储结构</th><th>加载因子</th><th>扩容机制</th><th>底层原理</th></tr>
+</thead>
+<tbody>
+<tr><td>HashMap</td><td>数组<br>+ 链表</td><td>0.75</td><td>容量 为 12 后，2 倍当容量扩容</td><td><strong>1.7(数组 + 链表)，1.8(数组 + 链表 + 红黑书)</strong></td></tr>
+<tr><td>LinkedHashMap</td><td>红黑树 + 链表</td><td> </td><td> </td><td>拉链式散列</td></tr>
+<tr><td>TreeMap</td><td>红黑树</td><td> </td><td> </td><td> </td></tr>
+</tbody>
+</table>
+<p>java1.7    hashMap 底层实现是数组 + 链表</p>
+<p>java1.8 对上面进行优化  数组 + 链表 + 红黑树</p>
+<p><strong>解决 hash 冲突</strong></p>
+<p>　　　　就是不同的元素通过   Hash&amp;(lenth-1) 公式算出的位置相同，现在就启动了链表（单项链表），挂在了当前位置的下面，而链表的元素怎么关联呢，就用到了 Node  的 next  ，next 的值就是该链表下一个元素在内存中的地址。</p>
+<p>　　　　jdk1.7  就是这样处理的，而到了 1.8  以后，就引用了红黑树，1.8 以后这个链表只让挂 7 个元素，超过七个就会转成一个红黑树进行处理（最多是 64，超多 64 就会重新拆分）。</p>
+<p>　　　　当红黑树下挂的节点小于等于 6 的时候，系统会把红黑树转成链表。  Node 在 jdk1.8 之前是插入 l 链表头部的，在 jdk1.8 中是插入链表的尾部的。</p>
+<p><strong>hashMap 扩容：</strong></p>
+<p>　　　　hashMap  会根据  当前的 hashMap 的存储量达到 16*0.75=12 的时候，就是扩容  16**2=32  依次类推下去。2 倍扩容。</p>
+<p>　　　　扩容后元素是如何做到均匀分的。</p>
+<p><strong>hashMap 扩容：</strong></p>
+<p>　　　　hashMap  会根据  当前的 hashMap 的存储量达到 16*0.75=12 的时候，就是扩容  16**2=32  依次类推下去。2 倍扩容。</p>
+<p>　　　　扩容后元素是如何做到均匀分的。</p>
+<p>　　　　　　<img src="https://img2018.cnblogs.com/blog/1460902/201902/1460902-20190227173355651-2116009462.png" alt="https://img2018.cnblogs.com/blog/1460902/201902/1460902-20190227173355651-2116009462.png"></p>
+<h1 id="toc_h1_6"><a href="https://segmentfault.com/a/1190000012964859" target="_blank">LinkedHashMap 源码详细分析（JDK1.8）https://segmentfault.com/a/1190000012964859</a></h1>
+<p>　这位大哥写的很好，可以看一下    <a href="https://segmentfault.com/a/1190000012964859" target="_blank">https://segmentfault.com/a/1190000012964859</a></p>
+<p>　　我针对 LinkedHashMap 的总结有一下几点</p>
+<p>　　1.LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构。该结构由数组和链表 + 红黑树 在此基础上 LinkedHashMap 增加了一条双向链表，保持遍历顺序和插入顺序一致的问题。</p>
+<p>　　2. 在实现上，LinkedHashMap 很多方法直接继承自 HashMap（比如 put  remove 方法就是直接用的父类的），仅为维护双向链表覆写了部分方法（get（）方法是重写的）。</p>
+<p>　　3.LinkedHashMap 使用的键值对节点是 Entity 他继承了 hashMap 的 Node,并新增了两个引用，分别是 before 和 after。这两个引用的用途不难理解，也就是用于维护双向链表。</p>
+<p>　　4.链表的建立过程是在插入键值对节点时开始的，初始情况下，让 LinkedHashMap 的 head 和 tail 引用同时指向新节点，链表就算建立起来了。随后不断有新节点插入，通过将新节点接在 tail 引用指向节点的后面，即可实现链表的更新</p>
+<p>　　5.LinkedHashMap <strong>允许使用 null 值和 null 键，</strong> 线程是不安全的，虽然底层使用了双线链表，但是增删相快了。因为他底层的 Entity 保留了 hashMap  node 的 next 属性。</p>
+<p>　　6.如何实现迭代有序？</p>
+<p>　　重新定义了数组中保存的元素 Entry（继承于 HashMap.node)，该 Entry 除了保存当前对象的引用外，还保存了其上一个元素 before 和下一个元素 after 的引用，从而在哈希表的基础上又构成了双向链接列表。仍然保留 next 属性，所以既可像 HashMap 一样快速查找，</p>
+<p>　　用 next 获取该链表下一个 Entry，也可以通过双向链接，通过 after 完成所有数据的有序迭代。</p>
+<p>*　　7.竟然 inkHashMap 的 put 方法是直接调用父类 hashMap 的，但在 HashMap 中，put 方法插入的是 HashMap 内部类 Node 类型的节点，该类型的节点并不具备与 LinkedHashMap 内部类 Entry 及其子类型节点组成链表的能力。那么，LinkedHashMap 是怎样建立链表的呢？*</p>
+<p>*　　　虽然 linkHashMap* 调用的是 hashMap 中的 put 方法，但是 linkHashMap 重写了，了一部分方法，其中就有  <code>&lt;span class="hljs-title"&gt;newNode&lt;span class="hljs-params"&gt;(&lt;span class="hljs-keyword"&gt;int hash, K key, V value, Node&lt;K,V&gt; e)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;``&lt;span class="hljs-function"&gt;&lt;span class="hljs-title"&gt;linkNodeLast&lt;span class="hljs-params"&gt;(LinkedHashMap.Entry&lt;K,V&gt; p)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;</code></p>
+<p><code>&lt;span class="hljs-function"&gt;&lt;span class="hljs-title"&gt;　　　这两个方法就是 第一个方法就是新建一个 linkHasnMap 的Entity 方法，而&lt;span&gt; &lt;/span&gt;&lt;code class="java"&gt;&lt;span class="hljs-function"&gt;&lt;span class="hljs-title"&gt;linkNodeLast 方法就是为了把Entity 接在链表的尾部。&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/span&gt;&lt;/span&gt;</code></p>
+<p>　　8.链表节点的删除过程</p>
+<p>　　　与插入操作一样，LinkedHashMap 删除操作相关的代码也是直接用父类的实现，但是 LinkHashMap 重写了 <code>&lt;span class="hljs-function"&gt;&lt;span class="hljs-title"&gt;removeNode()方法&lt;span&gt; &lt;/span&gt;&lt;code&gt;afterNodeRemoval&lt;/code&gt;（）方法，该removeNode方法在hashMap 删除的基础上有调用了&lt;code&gt;afterNodeRemoval&lt;/code&gt; 回调方法。完成删除。&lt;/span&gt;&lt;/span&gt;</code></p>
+<p>　　删除的过程并不复杂，上面这么多代码其实就做了三件事：</p>
+<ol>
+<li>根据 hash 定位到桶位置</li>
+<li>遍历链表或调用红黑树相关的删除方法</li>
+<li>从 LinkedHashMap 维护的双链表中移除要删除的节点</li>
+</ol>
+<p><strong>TreeMap 和 SortMap</strong></p>
+<p>**　　1.TreeMap 实现了 SortedMap 接口，保证了有序性。默认的排序是根据 key 值进行升序排序，也可以重写 comparator 方法来根据 value 进行排序<strong>具体取决于使用的构造方法</strong>。不允许有 null 值 null 键。TreeMap 是线程不安全的。**</p>
+<p>**　　　2.TreeMap 基于<strong>红黑树（Red-Black tree）实现</strong>。**<strong>TreeMap 的基本操作 containsKey、get、put 和 remove 的时间复杂度是 log(n) 。</strong></p>
+<p>public class SortedMapTest {</p>
+<p>public static void main(String[] args) {</p>
+<p>SortedMap&lt;String,String&gt; sortedMap = new TreeMap&lt;String,String&gt;();<br>
+sortedMap.put("1", "a");<br>
+sortedMap.put("5", "b");<br>
+sortedMap.put("2", "c");<br>
+sortedMap.put("4", "d");<br>
+sortedMap.put("3", "e");<br>
+Set&lt;Entry&lt;String, String&gt;&gt; entry2 = sortedMap.entrySet();<br>
+for(Entry&lt;String, String&gt; temp : entry2){<br>
+System.out.println("修改前 ：sortedMap:"+temp.getKey()+" 值"+temp.getValue());<br>
+}<br>
+System.out.println("\n");</p>
+<p>//这里将 map.entrySet()转换成 list<br>
+List&lt;Map.Entry&lt;String,String&gt;&gt; list =<br>
+new ArrayList&lt;Map.Entry&lt;String,String&gt;&gt;(entry2);</p>
+<p>Collections.sort(list, new Comparator&lt;Map.Entry&lt;String,String&gt;&gt;(){</p>
+<p>@Override<br>
+public int compare(Entry&lt;String, String&gt; o1, Entry&lt;String, String&gt; o2) {<br>
+// TODO Auto-generated method stub<br>
+return o1.getValue().compareTo(o2.getValue());<br>
+}</p>
+<p>});</p>
+<p>for(Map.Entry&lt;String,String&gt; temp :list){<br>
+System.out.println("修改后 ：sortedMap:"+temp.getKey()+" 值"+temp.getValue());<br>
+}<br>
+}</p>
+<p>}</p>
+<h2 id="toc_h2_7">Set</h2>
+<table>
+<thead>
+<tr><th>接口名称</th><th>数据结构</th><th>特点</th></tr>
+</thead>
+<tbody>
+<tr><td>HashSet</td><td>哈希表</td><td>线程不安全，</td></tr>
+<tr><td>TreeSet</td><td>二叉树（红黑树）</td><td>不安全，比较数据，需要实现 Comparable 接口</td></tr>
+</tbody>
+</table>
+<h3 id="toc_h3_8">HashSet源码分析</h3>
+<pre><code>public class HashSet&lt;E&gt; extends AbstractSet&lt;E&gt; 
+		implements Set&lt;E&gt;, Cloneable, Java.io.Serializable
+
+</code></pre>
+<ul>
+<li>HashSet <e>：存储的是单个泛型元素</e></li>
+<li>extends AbstractSet<e>：继承自AbstractSet，实现Set接口时需要实现的工作量大大减少了</e></li>
+<li>implements Set<e>：实现了Set接口，提供了所有可选的 Set 操作</e></li>
+<li>implements Cloneable：可以调用 clone() 方法来返回实例的 field-for-field 拷贝</li>
+<li>implements Serializable：可以序列化</li>
+</ul>
+<h3 id="toc_h3_9">字段</h3>
+<pre><code>// HashSet的底层就是一个HashMap实例
+private transient HashMap&lt;E,Object&gt; map;
+
+// HashMap是保存键值对的，而HashSet实际上只想保存key
+// 因此创建一个PRESENT表示所有的value
+private static final Object PRESENT = new Object();
+</code></pre>
+<h3 id="toc_h3_10">构造方法</h3>
+<h4 id="toc_h4_11">常规构造方法</h4>
+<p>public HashSet()：实际上就是构造一个空的HashMap，然后赋值给 map 字段<br>
+public HashSet(Collection&lt;? extends E&gt; c)：构造一个包含指定集合中所有元素的新set<br>
+public HashSet(int initialCapacity, float loadFactor)：构造一个新的空set，其底层HashMap实例具有指定的初始容量和加载因子<br>
+public HashSet(int initialCapacity)：构造一个新的空set，其底层HashMap实例具有指定的初始容量和默认的加载因子 (0.75)</p>
+<h4 id="toc_h4_12">特殊构造方法</h4>
+<ul>
+<li>这个构造方法是一个包私有 (package private) 的方法，可以看到它的修饰符不是 public</li>
+<li>该方法仅用于构造 LinkedHashSet，创建的是 LinkedHashMap 而非之前的 HashMap，用于维护 Set 内元素的顺序</li>
+<li>在 LinkedHashSet 进行初始化时，通过增加 dummy 参数来调用该方法</li>
+</ul>
+<pre><code>HashSet(int initialCapacity, float loadFactor, boolean dummy) 
+{
+	map = new LinkedHashMap&lt;&gt;(initialCapacity, loadFactor);
+}
+
+</code></pre>
+<p><strong>HashSet 和 TreeSet 有什么区别呢？</strong></p>
+<p>　　他们的区别主要在他们底层的数据结构不同。HashSet 使用的 HashMap 来实现的，而 TreeSet 使用的 TreeMap 来实现的。</p>
+<p><strong>HashMap 和 TreeMap 的区别呢？</strong></p>
+<p>　　HashMap 是一个最常用的数据结构，它主要用于我们又通过固定值（key）获取内容的场景，时间复杂度可以最快优化到 O(1)，当然效果不好的时候时间复杂度是 O(logN)或者 O(n)。虽然固定值查找提高了速度，但是 HashMap 不能保证固定值，也就是 key 的顺序，所以这个时候 TreppMap 就出现了，虽然它的查找、删除、更新的时间复杂度都是 O(logN)，但是它保证了 key 的有序性。</p>
+<p><strong>HashMap 和 TreeMap 的底层实现有什么不同呢？</strong></p>
+<p>　　　HashMap 使用的是数组和哈希的方式实现，巧妙通过可以的哈希路由到每个数组用于存放内容，这时候通过 key 获取 value 的时间复杂度就是 O(1)，当然因为 key 的哈希可能碰撞，所以就需要针对碰撞的时候做处理，HashMap 里面每一个数组里面存的其实是一个链表，key 的哈希冲突以后会追加到链表上面，这个时候再通过 key 获取 value 的时候时间复杂度就是 O(n)，那么碰撞越多的时候查询是不是会变得很慢呢？最后为了优化这个时间复杂度，HashMap 当一个 key 碰撞次数超过 treeify threshold 的时候就会把链表转化成红黑树，这样虽然插入的时候也增加了时间复杂度变成了 O(logN)，说到红黑树就把 HashMap 和 TreeMap 联系到一起了，因为 TreeMap 的底层实现就是红黑树。</p>
+<p><strong>那为什么用红黑树而不用二叉搜索树呢？</strong></p>
+<p>　　二叉搜索树是左子树的值小于根节点，右子树的值大于根节点，如果构建根节点以后插入的数据是有序的，那么构造出来的二叉搜索树就不是平衡树，二十一个链表，那么它的时间复杂度就是 O(n)。红黑树因为每个节点都是黑色或者红色两种颜色，当然他也有一些特性，</p>
+<p>　　　　1.根节点是黑色的</p>
+<p>　　　　2.红色节点的子节点和父节点都是黑色</p>
+<p>　　　　3.任何一条路经的黑色节点个数相同。</p>
+<p>　　　　<img src="https://img.hacpai.com/file/2020/02/1593476201910172203122501121312259-880f7b6a.gif" alt="" title="1593476201910172203122501121312259.gif"></p>
+<h1 id="toc_h1_13"><strong>面试题</strong></h1>
+<h2 id="toc_h2_14">List</h2>
+<ol>
+<li>ArrayList 和 Vector 的区别。<br>
+答：<br>
+ArrayList</li>
+<li>实现原理：采用动态对象数组实现，默认构造方法创建了一个空数组</li>
+<li>第一次添加元素，扩展容量为 10，之后的扩充算法：原来数组大小 + 原来数组的一半</li>
+<li>当插入、删除位置比较靠前时，与链表比较，不适合进行删除或插入操作</li>
+<li>为了防止数组动态扩充次数过多，建议创建 ArrayList 时，给定初始容量</li>
+<li>多线程中使用不安全，适合在单线程访问时使用，效率较高</li>
+</ol>
+<p>Vector</p>
+<ol>
+<li>实现原理：采用动态数组对象实现，默认构造方法创建了一个大小为 10 的对象数组</li>
+<li>扩充的算法：当增量为 0 时，扩充为原来的 2 倍，当增量大于 0 时，扩充为原来大小 + 增量</li>
+<li>当插入、删除位置比较靠前时，与链表比较，不适合删除或插入操作</li>
+<li>为了防止数组动态扩充次数过多，建议创建 Vector 时，给定初始容量</li>
+<li>线程安全，适合在多线程访问时使用，效率较低<br>
+集合的使用注意：<br>
+若使用集合来存储多个不同类型的元素（对象），那么在处理时会比较麻烦<br>
+在实际开发中不建议这样使用，我们应该在一个集合中存储相同的类型对象</li>
+</ol>
+<p>（2）说说 ArrayList,Vector, LinkedList 的存储性能和特性。</p>
+<ol>
+<li>ArrayList 采用的是数组形式来保存对象的，这种方式将对象放在连续的位置中，所以最大的缺点就是插入删除时非常麻烦</li>
+<li>LinkedList 采用的将对象存放在独立的空间中，而且在每个空间中保存下一个链接的索引，但是缺点就是查找非常麻烦，要从第一个索引开始</li>
+<li>ArrayList 和 Vector 都是用数组方式存储数据，此数组元素数要大于实际的存储空间以便进行元素增加和插入操作，他们都允许直接用序号索引元素，但是插入数据元素涉及到元素移动等内存操作，所以索引数据快而插入数据慢</li>
+<li>Vector 使用了 synchronized 方法（线程安全），所以在性能上比 ArrayList 要差些</li>
+<li>LinkedList 使用双向链方式存储数据，按序号索引数据需要向前或向后遍历数据，索引索引数据慢，插入数据时只需要记录前后项即可，所以插入的速度快</li>
+</ol>
+<p>（3）快速失败 (fail-fast) 和安全失败 (fail-safe) 的区别是什么？</p>
+<ol>
+<li>快速失败（fail-fast）<br>
+在用迭代器遍历一个集合对象时，如果遍历过程中对集合对象的内容进行修改（增加、删除、修改），则会抛出 Concurrent Modification Exception.<br>
+原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变 modCount 的值。每当迭代器使用 hashNext()/next()遍历下一个元素之前，都会检测 modCount 变量是否为 expectedmodCount 值，是的话就返回遍历；否则抛出异常，终止遍历。<br>
+注意：这里异常的抛出条件是检测到 modCount!=expectedmodCount 这个条件。如果集合发生变化时修改 modCount 值刚好又设置为了 expectedmodCount 值，则异常不会抛出。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的 bug。<br>
+场景：java.util 包下的集合类都是快速失败的，不能在多线程下发生并发修改（迭代过程中被修改）。</li>
+<li>安全失败（fail-safe）<br>
+采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。<br>
+原理：由于迭代时是对原集合的拷贝进行遍历，所以在遍历过程中对原集合所作的修改并不能被迭代器检测到，所以不会触发 Concurrent Modification Exception。<br>
+缺点：基于拷贝内容的优点是避免了 Concurrent Modification Exception,但同样地，迭代器并不能访问到修改后的内容，即：迭代器遍历的是开始遍历那一刻拿到的集合拷贝，在遍历期间原集合发生的修改迭代器是不知道的<br>
+场景：java.util.concurrent 包下的容器都是安全失败，可以在多线程下并发使用，并发修改。</li>
+</ol>
+<h2 id="toc_h2_15">Map</h2>
+<p>1 HashMap 特性？<br>
+　　HashMap 的特性：HashMap 存储键值对，实现快速存取数据；允许 null 键/值；线程不安全；不保证有序(比如插入的顺序)。</p>
+<p>2 HashMap 中 hash 函数怎么是是实现的？还有哪些 hash 的实现方式？<br>
+　　1. 对 key 的 hashCode 做 hash 操作（高 16bit 不变，低 16bit 和高 16bit 做了一个异或）；<br>
+　　2. h &amp; (length-1); //通过位操作得到下标 index。</p>
+<ol>
+<li>扩展问题 1：当两个对象的 hashcode 相同会发生什么？<br>
+　　因为两个对象的 Hashcode 相同，所以它们的 bucket 位置相同，会发生“碰撞”。HashMap 使用链表存储对象，这个 Entry(包含有键值对的 Map.Entry 对象)会存储在链表中。</li>
+</ol>
+<p>4 扩展问题 2：抛开 HashMap，hash 冲突有那些解决办法？<br>
+　　开放定址法、链地址法、再哈希法。</p>
+<p>5 如果两个键的 hashcode 相同，你如何获取值对象？<br>
+　　重点在于理解 hashCode()与 equals()。<br>
+　　通过对 key 的 hashCode()进行 hashing，并计算下标( n-1 &amp; hash)，从而获得 buckets 的位置。两个键的 hashcode 相同会产生碰撞，则利用 key.equals()方法去链表或树（java1.8）中去查找对应的节点。</p>
+<p>6 针对 HashMap 中某个 Entry 链太长，查找的时间复杂度可能达到 O(n)，怎么优化？<br>
+　　将链表转为红黑树，实现 O(logn) 时间复杂度内查找。JDK1.8 已经实现了。</p>
+<p>7.如果 HashMap 的大小超过了负载因子(load factor)定义的容量，怎么办？<br>
+　　扩容。这个过程也叫作 rehashing，因为它重建内部数据结构，并调用 hash 方法找到新的 bucket 位置。<br>
+　　大致分两步：<br>
+　　1.扩容：容量扩充为原来的两倍（2 * table.length）；<br>
+　　2.移动：对每个节点重新计算哈希值，重新计算每个元素在数组中的位置，将原来的元素移动到新的哈希表中。 (如何计算上面讲的有)<br>
+　　</p>
+<p>8 为什么 String, Interger 这样的类适合作为键？<br>
+　　String, Interger 这样的类作为 HashMap 的键是再适合不过了，而且 String 最为常用。<br>
+　　因为 String 对象是不可变的，而且已经重写了 equals()和 hashCode()方法了。<br>
+　　1.不可变性是必要的，因为为了要计算 hashCode()，就要防止键值改变，如果键值在放入时和获取时返回不同的 hashcode 的话，那么就不能从 HashMap 中找到你想要的对象。不可变性还有其他的优点如线程安全。<br>
+　　注：String 的不可变性可以看这篇文章《【Java 基础】浅析 String》。<br>
+　　2.因为获取对象的时候要用到 equals()和 hashCode()方法，那么键对象正确的重写这两个方法是非常重要的。如果两个不相等的对象返回不同的 hashcode 的话，那么碰撞的几率就会小些，这样就能提高 HashMap 的性能。</p>
+<p><strong>9.hashmap.put 为什么是线程不安全的。（很重要）</strong></p>
+<p>正常情况下  hashmap 在保存数据时，底层是数组 + 链表 + 红黑树  但是 你去源码中看时，i 发现子啊 hashMap 底层没有加任何的多线程中的锁机制，比如： synchronize 修饰  ，所以在多线程的情况下  hashMap 的单项链表，</p>
+<p>可能会变成一个环形的链表，所以这个链表上的 Next 元素的指向永远不为 null, 所以在遍历的时候就是死循环啊。</p>
+<p>　9.1<em>HashMap 在 put 的时候，插入的元素超过了容量（由负载因子决定）的范围就会触发扩容操作，就是 rehash，这个会重新将原数组的内容重新 hash 到新的扩容数组中，在多线程的环境下，存在同时其他的元素也在进行 put 操作，如果 hash 值相同，可能出现同时在同一数组下用链表表示，造成闭环，导致在 get 时会出现死循环，所以 HashMap 是线程不安全的</em></p>
+<p>　9.2 HashMap 底层是一个 Entry 数组，当发生 hash 冲突的时候，hashmap 是采用链表的方式来解决的，在对应的数组位置存放链表的头结点。对链表而言，新加入的节点会从头结点加入。在 hashmap 做 put 操作的时候会调用到以上的方法。现在假如 A 线程和 B 线程同时对同一个数组位置调用 addEntry，两个线程会同时得到现在的头结点，然后 A 写入新的头结点之后，B 也写入新的头结点，那 B 的写入操作就会覆盖 A 的写入操作造成 A 的写入操作丢失</p>
+<p>　　　</p>
+<p>10 ,hashmap 初始化时就生了一个长度为 16 的数组。</p>
+<p>　　1.1 为什么初始化时 16   而不是别的数字，</p>
+<p>　　　　1.其实是 4 或者 8 只要是 2 的 N 次幂就行，因为 hashMap put 元素时，会根据 key 进行运算得到一个位置，运算就是，根据 key 的 hash 值&amp;hashMap 的长度-1（hash&amp;length-1）  ，</p>
+<p>　　　　假如 hashMap 的长度为 16     补充：&amp;运算时，都是 1 才为 1,其他情况都为 0</p>
+<p>　　　　hash 值   1010 1010 1000 0000 ....   1010</p>
+<p>　　　　&amp;</p>
+<p>　　　　lennth-1 　　　　　　　　　　　　0111</p>
+<p>　　　　你会发现不管 hash 值为多少，只要 length 的长度是 2 的 N 次幂， 那么 length-1 的二进制最后一位就是 1,所以  hash 值&amp;上 length-1 最后得到的二进制数字的末位，可能是 1 也可能是 0,</p>
+<p>　　　　如果 其长度不是 2 的 n 次幂，比如 15 ，那么 15-1 =14 的 二进制 0110，那么遇上 hash  的到二进制末位，永远就是 0 了 ，这就侧面的表明了通过计算出来的元素位置的分散性。</p>
+<p>　　　　为什么不选 4,8 这些也是 2 的 N 次幂作为扩容初始化值呢？其实 8 也行 4 也行，但是 我的 Java 是 c 语言写的，而 c 语言是由汇编语言，而汇编的语言来源是机器语言，而汇编的语言使用的就是 16 进制，对于经验而言，当然就选 16 喽。</p>
+<h2 id="toc_h2_16"><strong>Set</strong></h2>
+<p>1.List，Map，Set 三个接口存取元素时，各有什么特点？</p>
+<p>List 以特定索引来存取元素，可以有重复元素，Set 不能存放重复元素（用对象的 equlas 方法来区分元素是否重复）Map 保存键值对（Key -value pair）映射，映射关系可以是一对一或多对一。Set 和 Map 容器都有基于哈希存储和排序树的两种实现版本，基于哈希存储的版本理论存取时间复杂度为 o（1），而基于排序树版本的实现在插入和删除元素时会按照元素或元素的键 key 构成排序树从而达到排序和去重的效果</p>
+<p>2.TreeMap 和 TreeSet 在排序时如何比较元素？Collection 工具类中的 sort 方法如何比较元素？</p>
+<p>TreeSet 要求存放的对象所属的类必须是实现 Comparable 接口，该接口提供了比较元素的 compareTo 方法，当插入元素时会调该方法比较元素的大小。TreeMap 要求存放的键值对映射的键必须事先 Comparable 接口从而根据键对元素进行排序 Collections 工具类的 sort 方法有两种重载的形式，第一种要求传入的待排序容器中存放的对象比较实现 Comparable 接口以实现元素的比较，第二种不强制性的要求容器中的元素必须可比较但是要求第二个参数 参数是 Comparator 接口的子类型（需要重写 compare 方法实现元素的比较）相当一个临时定义的排序规则 其实就是通过接口注入比较元素大小的算法 也是对回调模式的应用</p>
+                    <div>
+                        <hr>
+
+标题：集合框架（一）集合基础知识<br>
+作者：<a href="www.alexli.com.cn" target="_blank">alex18595752445</a><br>
+地址：<a href="www.alexli.com.cn" target="_blank">https://github.com/articles/2020/02/27/1582780977263.html</a><br>
+
+<!-- 签名档内可使用 HTML、JavaScript -->
+<br>
+                    </div>
+            </section>
+        </div>
+
+    </div>
+        <div class="post__toc">
+<ul class="article__toc">
+        <li class="toc__h1">
+            <a href="#toc_h1_0">一、集合框架总体架构图分析</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_1">二、Collection 集合接口</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_2">List 子类对比</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_3">原因分析</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_4">总结：</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_5">Map</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_6">LinkedHashMap 源码详细分析（JDK1.8）https://segmentfault.com/a/1190000012964859</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_7">Set</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_8">HashSet源码分析</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_9">字段</a>
+        </li>
+        <li class="toc__h3">
+            <a href="#toc_h3_10">构造方法</a>
+        </li>
+        <li class="toc__h4">
+            <a href="#toc_h4_11">常规构造方法</a>
+        </li>
+        <li class="toc__h4">
+            <a href="#toc_h4_12">特殊构造方法</a>
+        </li>
+        <li class="toc__h1">
+            <a href="#toc_h1_13">面试题</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_14">List</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_15">Map</a>
+        </li>
+        <li class="toc__h2">
+            <a href="#toc_h2_16">Set</a>
+        </li>
+</ul>        </div>
+        <div id="b3logsolocomments"></div>
+        <div class="wrapper">
+            <div id="vcomment"
+                 style="    margin-bottom: 40px; margin-top: 80px;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 5px;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 20px;"
+                 data-name="alex18595752445" data-postId="1582780977263"></div>
+        </div>
+    <div class="article__bottom">
+        <div class="wrapper">
+            <div class="fn__flex">
+                <div class="item" id="randomArticles"></div>
+                <div class="item" id="relevantArticles"></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/TweenMax.min.js?1583580097307"
+        charset="utf-8"></script>
+<footer class="footer">
+    <div class="wrapper">
+            <a href="https://hacpai.com/member/alex18595752445"
+       title="https://hacpai.com/member/alex18595752445"
+       class="user__site"
+       target="_blank" rel="noopener nofollow">
+        <svg viewBox="0 0 32 32" width="100%" height="100%">
+            <path fill="#d23f31" style="fill: var(--color1, #d23f31)" d="M5.787 17.226h17.033l5.954 9.528c0.47 0.752 0.003 1.361-1.042 1.361h-15.141z"></path>
+            <path d="M10.74 3.927h17.033c1.045 0 1.512 0.609 1.042 1.361l-5.954 9.528h-19.872l6.379-10.209c0.235-0.376 0.849-0.681 1.372-0.681z"></path>
+            <path d="M2.953 17.226h2.839l6.804 10.889h-1.892c-0.523 0-1.137-0.305-1.372-0.681z"></path>
+        </svg>
+    </a>
+
+        <a href="https://github.com/alexhaoxuan"
+           title="https://github.com/alexhaoxuan"
+           class="user__site"
+           target="_blank" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M16 0.331c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"></path>
+            </svg>
+        </a>
+
+        <a href="tencent://message/?uin=948928501"
+           title="948928501"
+           target="_blank"
+           class="user__site" rel="noopener nofollow">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M4.821 14.393c-0.125-0.304-0.143-0.607-0.143-0.929 0-0.5 0.321-1.304 0.625-1.679-0.018-0.464 0.179-1.411 0.536-1.714 0-3.304 2.554-7.464 5.536-8.893 1.839-0.875 3.768-1.179 5.786-1.179 1.571 0 3.286 0.375 4.75 0.982 4.196 1.768 5.143 5.054 6.036 9.25l0.018 0.089c0.518 0.786 0.982 1.714 0.982 2.679 0 0.482-0.321 0.964-0.321 1.393 0 0.036 0.107 0.179 0.125 0.214 1.536 2.268 2.929 4.732 2.929 7.554 0 0.625-0.339 2.804-1.339 2.804-0.696 0-1.464-1.696-1.714-2.161-0.018-0.018-0.036-0.018-0.054-0.018l-0.089 0.071c-0.571 1.482-1.196 2.875-2.357 3.982 1.018 0.982 2.661 0.893 2.964 2.589-0.089 0.196-0.054 0.411-0.196 0.607-1.018 1.536-3.75 1.732-5.393 1.732-2.179 0-3.946-0.571-6-1.179-0.429-0.125-1.071-0.054-1.536-0.107-1.089 1.196-3.75 1.518-5.286 1.518-1.357 0-6.607-0.089-6.607-2.411 0-1 0.214-1.286 0.911-1.929 0.554-0.107 0.964-0.411 1.607-0.446 0.089 0 0.161-0.018 0.25-0.036 0.018-0.018 0.036-0.018 0.036-0.071l-0.036-0.054c-1.232-0.286-2.964-3.393-3.232-4.679l-0.089-0.054c-0.125 0-0.179 0.268-0.214 0.357-0.393 0.911-1.321 1.893-2.357 2h-0.018c-0.143 0-0.089-0.143-0.196-0.179-0.25-0.589-0.411-1.125-0.411-1.786 0-3.571 1.714-6.214 4.5-8.321z"></path>
+            </svg>
+        </a>
+        <a href="javascript:void(0)"
+           class="user__site" title="wan948928501">
+            <svg viewBox="0 0 32 32" width="100%" height="100%">
+                <path d="M9.062 9.203c0-0.859-0.562-1.422-1.422-1.422-0.844 0-1.703 0.562-1.703 1.422 0 0.844 0.859 1.406 1.703 1.406 0.859 0 1.422-0.562 1.422-1.406zM20.672 17.125c0-0.562-0.562-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.859 0 1.422-0.562 1.422-1.141zM16.984 9.203c0-0.859-0.562-1.422-1.406-1.422-0.859 0-1.703 0.562-1.703 1.422 0 0.844 0.844 1.406 1.703 1.406 0.844 0 1.406-0.562 1.406-1.406zM26.906 17.125c0-0.562-0.578-1.125-1.422-1.125-0.562 0-1.125 0.562-1.125 1.125 0 0.578 0.562 1.141 1.125 1.141 0.844 0 1.422-0.562 1.422-1.141zM22.75 10.922c-0.359-0.047-0.719-0.063-1.094-0.063-5.375 0-9.625 4.016-9.625 8.953 0 0.828 0.125 1.625 0.359 2.375-0.359 0.031-0.703 0.047-1.063 0.047-1.422 0-2.547-0.281-3.969-0.562l-3.953 1.984 1.125-3.406c-2.828-1.984-4.531-4.547-4.531-7.656 0-5.391 5.094-9.625 11.328-9.625 5.563 0 10.453 3.391 11.422 7.953zM32 19.687c0 2.547-1.688 4.813-3.969 6.516l0.859 2.828-3.109-1.703c-1.141 0.281-2.281 0.578-3.406 0.578-5.391 0-9.625-3.688-9.625-8.219s4.234-8.219 9.625-8.219c5.094 0 9.625 3.688 9.625 8.219z"></path>
+            </svg>
+        </a>
+ <br>
+        &copy; 2020
+        <a href="https://github.com">奶瓶</a>
+        豫ICP备20003042号
+        <span class="footer__heart">❤️</span>
+        Powered by <a href="https://solo.b3log.org" target="_blank">Solo</a>
+        <br>
+        Theme Bubble
+        <sup>[<a href="https://www.cnblogs.com/jajian" target="_blank">ref</a>]</sup>
+        by <a href="http://vanessa.b3log.org" target="_blank">Vanessa</a> <br>
+    </div>
+</footer>
+<svg class="side__top" id="sideTop" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <path d="M26.562 13.958c0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303v0c0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303v0zM23.305 10.7c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM20.022 7.417c0 0 0 0 0 0 0 0.72 0.583 1.303 1.303 1.303s1.303-0.583 1.303-1.303c0-0 0-0 0-0v0c0-0 0-0 0-0 0-0.72-0.583-1.303-1.303-1.303s-1.303 0.583-1.303 1.303c0 0 0 0 0 0v0zM29.67 0h-27.339c-0.677 0-1.228 0.551-1.228 1.228s0.551 1.228 1.228 1.228h11.151l-10.725 10.725c-0.476 0.476-0.476 1.253 0 1.729 0.226 0.226 0.551 0.351 0.852 0.351s0.626-0.125 0.852-0.351l10.074-10.074v25.936c0 0.677 0.551 1.228 1.228 1.228s1.228-0.551 1.228-1.228v-26.011c0.476 0.426 1.203 0.426 1.679-0.050s0.476-1.253 0-1.729l-0.576-0.576h11.577c0.677 0 1.228-0.551 1.228-1.228 0-0.626-0.551-1.178-1.228-1.178z"></path>
+</svg>
+<script>
+  var Label = {
+    servePath: "https://github.com",
+    staticServePath: "https://github.com",
+    luteAvailable: false,
+    hljsStyle: 'github',
+    langLabel: "zh_CN",
+    version: "3.9.0",
+    staticSite: true,
+    showCodeBlockLn: true,
+  }
+</script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/common.min.js?1583580097307"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="https://github.com/skins/Bubble/js/circleMagic.min.js?1583580097307"
+        charset="utf-8"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.css"/>
+<script async src="https://cdn.jsdelivr.net/npm/kanbanniang@0.2.6/index.js"></script>
+<div class="solo-kanbanniang">
+    <div class="solo-kanbanniang__tip"></div>
+    <canvas id="soloKanbanniang" width="280" height="250"></canvas>
+    <div class="solo-kanbanniang__tool">
+        <svg id="soloKanbanniangHome" viewBox="0 0 32 32" width="100%" height="100%">
+            <path d="M32 18.967l-16-12.42-16 12.42v-5.064l16-12.42 16 12.42zM28 18.516v12h-8v-8h-8v8h-8v-12l12-9z"></path>
+        </svg>
+        <svg id="soloKanbanniangRSS" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M320.364 768q0 45.728-32 77.728t-77.728 32-77.728-32-32-77.728 32-77.728 77.728-32 77.728 32 32 77.728zM612.94 838.272q1.152 16-9.728 27.424-10.272 12-26.848 12h-77.152q-14.272 0-24.576-9.44t-11.424-23.712q-12.576-130.848-105.44-223.712t-223.712-105.44q-14.272-1.152-23.712-11.424t-9.44-24.576V402.24q0-16.576 12-26.848 9.728-9.728 24.576-9.728h2.848q91.424 7.424 174.848 46.016t148 103.712q65.152 64.576 103.712 148t46.016 174.848z m292.576 1.152q1.152 15.424-10.272 26.848-10.272 11.424-26.272 11.424h-81.728q-14.848 0-25.44-10.016t-11.136-24.288q-6.848-122.848-57.728-233.44t-132.288-192-192-132.288-233.44-58.272q-14.272-0.576-24.288-11.136t-10.016-24.864V109.664q0-16 11.424-26.272 10.272-10.272 25.152-10.272h1.728q149.728 7.424 286.56 68.576t243.136 168q106.848 106.272 168 243.136t68.576 286.56z"></path>
+        </svg>
+        <svg id="soloKanbanniangChat" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M802.42709 96.163153H219.476155c-84.48109 0-154.896836 71.746044-154.896836 157.840888v393.119449c0 86.072331 70.415746 157.819398 154.896836 157.819399h214.038818V925.470963s22.526039 40.168862 64.767096 5.734608c30.965246-25.819039 126.721123-91.828428 171.775248-123.385145h132.369773c84.502579 0 154.896836-83.21526 154.896836-157.839865V251.125481c0-86.094844-70.394257-154.962328-154.896836-154.962328zM301.144176 518.002714c-39.427988 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044 39.426965 0 70.393233 31.577183 70.393234 71.746044 0 40.169885-30.966269 71.746044-70.393234 71.746044z m208.411657 0c-39.450501 0-70.415746-31.576159-70.415746-71.746044 0-40.168862 30.965246-71.746044 70.415746-71.746044 39.405475 0 70.394257 31.577183 70.394257 71.746044 0 40.169885-30.988782 71.746044-70.394257 71.746044z m211.203236 0c-39.426965 0-70.416769-31.576159-70.416769-71.746044 0-40.168862 30.988782-71.746044 70.416769-71.746044s70.415746 31.577183 70.415746 71.746044c-0.001023 40.169885-30.988782 71.746044-70.415746 71.746044z"></path>
+        </svg>
+        <svg id="soloKanbanniangChange" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M936.672 193.216l-226.88-64c-8.704-2.528-18.112-1.12-25.824 3.776-7.68 4.864-12.896 12.736-14.432 21.728C655.712 236.928 595.328 288 512 288c-71.424 0-142.464-103.296-163.776-143.104-7.136-13.28-22.528-19.84-37.024-15.68l-224 64C73.472 197.152 64 209.728 64 224v256a31.93 31.93 0 0 0 11.712 24.736c7.392 6.08 17.152 8.512 26.56 6.624L224 487.04V832c0 52.928 43.072 96 96 96h384c52.928 0 96-43.072 96-96V519.04l121.728 24.352c9.44 1.92 19.2-0.544 26.56-6.624C955.68 530.656 960 521.6 960 512V224c0-14.336-9.536-26.912-23.328-30.784zM672 800H352c-17.664 0-32-14.304-32-32s14.336-32 32-32h320c17.696 0 32 14.304 32 32s-14.304 32-32 32z"></path>
+        </svg>
+        <svg id="soloKanbanniangPhoto" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M898.048 258.048q23.552-1.024 46.592 9.216t40.96 27.136 28.672 39.424 10.752 46.08l0 390.144q0 24.576-10.752 47.104t-28.672 40.448-40.96 28.16-47.616 10.24l-697.344 0q-24.576 0-48.64-10.24t-42.496-27.648-29.696-40.448-11.264-48.64l0-381.952q0-22.528 10.752-45.568t28.672-41.472 39.936-30.208 44.544-11.776l63.488 0 13.312-83.968q3.072-20.48 18.432-32.768t34.816-12.288l456.704 0q19.456 0 34.304 10.752t16.896 34.304l14.336 83.968 54.272 0zM548.864 712.704q40.96 0 77.824-15.872t63.488-42.496 42.496-62.976 15.872-77.312-15.872-77.312-42.496-62.976-63.488-42.496-77.824-15.872-77.312 15.872-63.488 42.496-43.008 62.976-15.872 77.312 15.872 77.312 43.008 62.976 63.488 42.496 77.312 15.872z"></path>
+        </svg>
+        <svg id="soloKanbanniangGithub" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M1024 524.8c0 114.346667-32.554667 217.216-97.706667 308.565333-65.066667 91.306667-149.162667 154.538667-252.288 189.610667-11.989333 2.304-20.778667 0.682667-26.325333-4.778667a27.605333 27.605333 0 0 1-8.362667-20.48v-144.213333c0-44.16-11.52-76.501333-34.645333-97.024 25.344-2.730667 48.085333-6.826667 68.309333-12.288a268.629333 268.629333 0 0 0 62.72-26.666667 187.434667 187.434667 0 0 0 53.973334-45.44c14.421333-18.005333 26.197333-41.898667 35.328-71.765333 9.088-29.824 13.653333-64.128 13.653333-102.826667 0-55.125333-17.536-102.058667-52.650667-140.8 16.426667-41.429333 14.677333-87.893333-5.333333-139.392-12.458667-4.096-30.464-1.578667-54.016 7.509334a355.328 355.328 0 0 0-61.312 30.08L640 271.274667a462.336 462.336 0 0 0-128-17.749334c-43.989333 0-86.656 5.930667-128 17.749334a589.824 589.824 0 0 0-28.330667-18.432c-11.776-7.253333-30.336-16.042667-55.68-26.325334-25.344-10.24-44.416-13.312-57.301333-9.216-19.584 51.498667-21.12 97.962667-4.693333 139.434667-35.114667 38.698667-52.650667 85.632-52.650667 140.757333 0 38.698667 4.565333 72.874667 13.653333 102.485334 9.130667 29.610667 20.778667 53.546667 34.986667 71.765333 14.250667 18.218667 32.128 33.493333 53.674667 45.781333 21.546667 12.288 42.453333 21.205333 62.677333 26.666667 20.224 5.461333 43.008 9.557333 68.309333 12.288-17.749333 16.384-28.629333 39.850667-32.64 70.4a130.005333 130.005333 0 0 1-29.994666 10.24c-10.666667 2.261333-23.338667 3.413333-37.973334 3.413333-14.72 0-29.269333-4.906667-43.690666-14.677333-14.464-9.813333-26.794667-24.064-36.992-42.709333a109.226667 109.226667 0 0 0-32.341334-35.541334c-13.141333-9.130667-24.106667-14.592-33.024-16.426666l-13.312-2.048c-9.344 0-15.786667 1.024-19.328 3.072-3.584 2.090667-4.693333 4.693333-3.328 7.893333 1.28 3.157333 3.328 6.4 5.973334 9.557333 2.688 3.2 5.546667 5.930667 8.661333 8.192l4.693333 3.413334c9.770667 4.565333 19.413333 13.226667 29.013334 25.984 9.514667 12.757333 16.512 24.362667 20.992 34.858666l6.656 15.701334c5.76 17.322667 15.530667 31.317333 29.312 42.026666 13.781333 10.666667 28.672 17.536 44.672 20.48 16 2.986667 31.445333 4.565333 46.336 4.821334 14.890667 0.213333 27.221333-0.597333 36.992-2.389334l15.36-2.730666c0 17.28 0.085333 37.546667 0.298666 60.8l0.341334 36.906666a27.050667 27.050667 0 0 1-8.661334 20.48c-5.76 5.461333-14.677333 7.082667-26.666666 4.778667-103.125333-35.072-187.221333-98.261333-252.330667-189.610667C32.554667 742.058667 0 639.146667 0 524.8c0-95.232 22.869333-183.04 68.693333-263.466667A516.266667 516.266667 0 0 1 254.976 70.4C333.44 23.466667 419.114667 0 512 0c92.885333 0 178.56 23.466667 256.981333 70.4a516.266667 516.266667 0 0 1 186.368 190.976C1001.130667 341.802667 1024 429.653333 1024 524.842667z"></path>
+        </svg>
+        <svg id="soloKanbanniangClose" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M517.572566143763 1018.6748601482986C238.26554897656422 1018.6748601482986 11.897910175114305 792.2714997690043 11.897910175114305 513.0002041796496c0-279.3070171671984 226.36763880144977-505.71037754649296 505.6746559686481-505.71037754649296 279.2712955893538 0 505.6746559686481 226.40336037929444 505.6746559686481 505.71037754649296C1023.2472221124112 792.2714997690043 796.8795833109612 1018.6748601482986 517.572566143763 1018.6748601482986zM754.7281214542927 339.25044954334646c13.752807470184345-13.752807470184345 9.680547595895998-40.186775075214015-9.073280772537204-58.94060344364717l-2.143294670678079-2.1075730928334457c-18.7538283684332-18.7538283684332-45.15207439561819-22.861809820566194-58.90488186580257-9.073280772537204l-168.21291007038468 168.24863164822932-180.42968969324974-180.46541127109438c-13.967136937252159-13.967136937252159-40.72259874288353-9.823433907274534-59.72647815622916 9.216167083915742l-2.143294670678079 2.143294670678079c-19.039600991190277 19.003879413345654-23.111860865478626 45.75934121897699-9.180445506071107 59.655035000539876l180.42968969324974 180.46541127109438-176.07165719620428 176.03593561835962c-13.788529048028984 13.824250625873615-9.716269173740633 40.151053497369375 9.073280772537204 58.94060344364717l2.1075730928334457 2.1075730928334457c18.7538283684332 18.7538283684332 45.15207439561819 22.897531398410823 58.90488186580257 9.073280772537204l176.10737877404887-176.10737877404887 170.39192631890742 170.42764789675192c13.967136937252159 13.931415359407513 40.686877165038865 9.85915548511917 59.690756578384516-9.180445506071107l2.1790162485227142-2.1790162485227142c19.039600991190277-18.968157835501014 23.147582443323273-45.72361964113239 9.180445506071107-59.690756578384516l-170.39192631890742-170.42764789675192L754.7281214542927 339.25044954334646z"></path>
+        </svg>
+    </div>
+</div>
+
+    <svg viewBox="0 0 32 32" width="100%" height="100%" class="side__top side__top--toc">
+        <path d="M30 18h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM30 6.25h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2h28c1.1 0 2 0.9 2 2s-0.9 2-2 2zM2 25.75h28c1.1 0 2 0.9 2 2s-0.9 2-2 2h-28c-1.1 0-2-0.9-2-2s0.9-2 2-2z"></path>
+    </svg>
+
+<script type="text/javascript">
+    Util.addScript('https://github.com/js/page.min.js?1583580097307', 'soloPageScript')
+    var page = new Page({
+        "commentContentCannotEmptyLabel": "评论内容只能为 2 到 500 个字符！",
+        "oId": "1582780977263",
+        "blogHost": "https://github.com",
+        "randomArticles1Label": "随机阅读：",
+        "externalRelevantArticles1Label": "站外相关阅读："
+    });
+    $(document).ready(function () {
+        page.load();
+    page.tips.externalRelevantArticlesDisplayCount = "0";
+    Skin.initArticle()
+    });
+</script>
+
+</body>
+</html>
+
+<!-- Generated by Latke (https://github.com/88250/latke) in 47ms, 2020/03/18 18:15:19 -->

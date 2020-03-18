@@ -5,8 +5,8 @@
     "display": "standalone",
     "name": "奶瓶",
     "start_url": ".",
-    "description": "在踩坑的路上",
-    "short_name": "奶瓶",
+    "description": "不会是在踩坑就是在踩坑的路上",
+    "short_name": "${shortName}",
     "icons": [
         {
             "sizes": "48x48",
